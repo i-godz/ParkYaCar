@@ -1,4 +1,4 @@
-// ignore_for_file: camel_case_types, library_private_types_in_public_api, prefer_final_fields, prefer_const_constructors, use_build_context_synchronously, avoid_print
+// ignore_for_file: camel_case_types, library_private_types_in_public_api, prefer_final_fields, prefer_const_constructors, use_build_context_synchronously, avoid_print, unnecessary_new
 
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -14,6 +14,8 @@ class Email_OTP extends StatefulWidget {
 class _VerificationState extends State<Email_OTP> {
   late String email;
   final TextEditingController emailController = TextEditingController();
+  final TextEditingController otpController = TextEditingController(); 
+
   EmailOTP myauth = EmailOTP();
   FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -36,6 +38,34 @@ class _VerificationState extends State<Email_OTP> {
         );
       },
     );
+  }
+
+  // Function to send OTP
+  Future<void> _sendOTP() async {
+    try {
+      // Check if the email is already registered in Firebase
+      await _auth.fetchSignInMethodsForEmail(email);
+      // Email exists in Firebase, send OTP
+      myauth.setConfig(
+        appEmail: "zyadwael509@gmail.com",
+        appName: "Email OTP",
+        userEmail: email,
+        otpLength: 5,
+        otpType: OTPType.digitsOnly,
+      );
+      final otpSent = await myauth.sendOTP();
+      if (otpSent) {
+        _showMessageDialog(
+            "An OTP (One-Time Password) has been dispatched to your registered email address. Kindly review both your inbox and spam folder for its arrival.");
+      } else {
+        _showMessageDialog("Oops, OTP send failed");
+      }
+    } catch (e) {
+      // Handle any exceptions that might occur
+      print("Error: $e");
+      _showMessageDialog(
+          "Enter the email address you used to sign up for our service.");
+    }
   }
 
   @override
@@ -82,55 +112,80 @@ class _VerificationState extends State<Email_OTP> {
                       SizedBox(
                         height: 25,
                       ),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.grey[300],
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        width: 300,
-                        padding: EdgeInsets.symmetric(horizontal: 16),
-                        child: TextField(
-                          controller: emailController,
-                          decoration: InputDecoration(
-                            icon: Icon(
-                              Icons.mail_outline_rounded,
-                              color: Colors.blue[800],
+                      Column(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Colors.grey[300],
+                              borderRadius: BorderRadius.circular(10),
                             ),
-                            hintText: "Email",
-                            border: InputBorder.none,
+                            width: 340,
+                            padding: EdgeInsets.symmetric(horizontal: 16),
+                            child: TextField(
+                              controller: emailController,
+                              decoration: InputDecoration(
+                                icon: Icon(
+                                  Icons.mail_outline_rounded,
+                                  color: Colors.blue[800],
+                                ),
+                                suffixIcon: IconButton(
+                                    onPressed: () async {
+                                      _sendOTP(); // Call the send OTP function
+                                    },
+                                    icon: const Icon(
+                                      Icons.send_rounded,
+                                      color: Colors.blueAccent,
+                                    )),
+                                hintText: "Email",
+                                border: InputBorder.none,
+                              ),
+                              onChanged: (value) {
+                                // Capture the email input and store it in the email variable
+                                email = value;
+                              },
+                            ),
                           ),
-                          onChanged: (value) {
-                            // Capture the email input and store it in the email variable
-                            email = value;
-                          },
-                        ),
+                          SizedBox(
+                            height: 23,
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Colors.grey[300],
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            width: 340,
+                            padding: EdgeInsets.symmetric(horizontal: 16),
+                            child: TextField(
+                              controller: otpController,
+                              decoration: InputDecoration(
+                                icon: Icon(
+                                  Icons.app_registration,
+                                  color: Colors.blue[800],
+                                ),
+                                hintText: "OTP",
+                                border: InputBorder.none,
+                              ),
+                              onChanged: (value) {
+                                // Capture the OTP input and store it in a variable
+                                // You can use this value as needed for OTP verification
+                              },
+                            ),
+                          ),
+                        ],
                       ),
                       SizedBox(
                         height: 23,
                       ),
                       ElevatedButton(
                         onPressed: () async {
-                          try {
-                            // Check if the email is already registered in Firebase
-                            await _auth.fetchSignInMethodsForEmail(email);
-                            // Email exists in Firebase, send OTP
-                            myauth.setConfig(
-                              appEmail: "zyadwael509@gmail.com",
-                              appName: "Email OTP",
-                              userEmail: email,
-                              otpLength: 5,
-                              otpType: OTPType.digitsOnly,
-                            );
-                            final otpSent = await myauth.sendOTP();
-                            if (otpSent) {
-      
-                            } else {
-                              _showMessageDialog("Oops, OTP send failed");
-                            }
-                          } catch (e) {
-                            // Handle any exceptions that might occur
-                            print("Error: $e");
-                            _showMessageDialog("An error occurred");
+                          if (await myauth.verifyOTP(otp: otpController.text) ==
+                              true) {
+                            Navigator.pushNamed(context, "/update_password");
+                          } else {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              content: Text("Invalid OTP"),
+                            ));
                           }
                         },
                         style: ButtonStyle(
@@ -138,13 +193,13 @@ class _VerificationState extends State<Email_OTP> {
                               MaterialStateProperty.all(Colors.blue),
                           padding: MaterialStateProperty.all(
                               EdgeInsets.symmetric(
-                                  horizontal: 100, vertical: 10)),
+                                  horizontal: 135, vertical: 10)),
                           shape: MaterialStateProperty.all(
                               RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10))),
                         ),
                         child: Text(
-                          "Get OTP",
+                          "Verify",
                           style: TextStyle(fontSize: 24),
                         ),
                       ),

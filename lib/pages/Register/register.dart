@@ -2,7 +2,6 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class Register extends StatefulWidget {
   const Register({Key? key}) : super(key: key);
@@ -23,7 +22,6 @@ class _RegisterState extends State<Register> {
         body: SafeArea(
       child: Scaffold(
         body: SizedBox(
-          height: double.infinity,
           width: double.infinity,
           child: SingleChildScrollView(
             reverse: true,
@@ -104,6 +102,29 @@ class _RegisterState extends State<Register> {
                       SizedBox(
                         height: 23,
                       ),
+                            Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        width: 300,
+                        padding: EdgeInsets.symmetric(horizontal: 16),
+                        child: TextFormField(
+                          onChanged: (value) {
+                            email = value;
+                          },
+                          decoration: InputDecoration(
+                              icon: Icon(
+                                Icons.call,
+                                color: Colors.blue[700],
+                              ),
+                              hintText: "Phone",
+                              border: InputBorder.none),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 23,
+                      ),
                       Container(
                         decoration: BoxDecoration(
                           color: Colors.grey[200],
@@ -144,6 +165,37 @@ class _RegisterState extends State<Register> {
                       SizedBox(
                         height: 23,
                       ),
+
+ 
+                      Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text("Already have an accout? "),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.pushNamed(context, "/login");
+                              },
+                              child: Text(
+                                "Login",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.blue[700]),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+
+ SizedBox(
+                        height: 23,
+                      ),
+
+
+
+
+
                       ElevatedButton(
   onPressed: () async {
     try {
@@ -298,110 +350,7 @@ class _RegisterState extends State<Register> {
 ),
 
 
-                      SizedBox(
-                        height: 25,
-                      ),
-                      SizedBox(
-                        width: 299,
-                        child: Row(
-                          children: [
-                            Expanded(
-                                child: Divider(
-                              thickness: 0.6,
-                              color: Colors.blue[700],
-                            )),
-                            Text(
-                              " OR ",
-                              style: TextStyle(
-                                color: Colors.blue[700],
-                              ),
-                            ),
-                            Expanded(
-                                child: Divider(
-                              thickness: 0.6,
-                              color: Colors.blue[700],
-                            )),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.symmetric(vertical: 20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            GestureDetector(
-                              onTap: () {},
-                              child: Container(
-                                padding: EdgeInsets.all(13),
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                        color: Colors.blue, width: 1)),
-                                child: SvgPicture.asset(
-                                  "assets/images/facebook.svg",
-                                  color: Colors.blue[700],
-                                  height: 27,
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 22,
-                            ),
-                            GestureDetector(
-                              onTap: () {},
-                              child: Container(
-                                padding: EdgeInsets.all(13),
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                        color: Colors.blue, width: 1)),
-                                child: SvgPicture.asset(
-                                  "assets/images/google-plus.svg",
-                                  color: Colors.blue[700],
-                                  height: 27,
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 22,
-                            ),
-                            GestureDetector(
-                              onTap: () {},
-                              child: Container(
-                                padding: EdgeInsets.all(13),
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                        color: Colors.blue, width: 1)),
-                                child: SvgPicture.asset(
-                                  "assets/images/twitter.svg",
-                                  color: Colors.blue[700],
-                                  height: 27,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text("Already have an accout? "),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.pushNamed(context, "/login");
-                              },
-                              child: Text(
-                                "Login",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.blue[700]),
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
+                    
                     ],
                   ),
                 ),

@@ -3,8 +3,8 @@
 import 'package:demoapp/pages/Login/email_forget_password.dart';
 import 'package:demoapp/pages/Login/login.dart';
 import 'package:demoapp/pages/Login/phone_forget_password.dart';
+import 'package:demoapp/pages/Login/update_password.dart';
 import 'package:demoapp/pages/Onboarding/onboarding.dart';
-import 'package:demoapp/pages/Login/otp_screen.dart';
 import 'package:demoapp/pages/Register/register.dart';
 import 'package:demoapp/pages/Register/verify_registration.dart';
 import 'package:flutter/material.dart';
@@ -28,8 +28,8 @@ class MyApp extends StatelessWidget {
         "/login": (context) => const Login(),
         "/register": (context) => const Register(),
         "/email_otp": (context) => const Email_OTP(),
-        "/phone_otp": (context) => const Phone_OTP(),
-        "/otp_screen": (context) => const OTP_Screen(),
+        "/phone_otp": (context) => Phone_OTP(),
+        "/update_password": (context) =>   CreateNewPassword(),
         "/verify_registration": (context) => const Verify_Registration(),
       },
     );
