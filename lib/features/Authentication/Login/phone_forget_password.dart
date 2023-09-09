@@ -1,13 +1,21 @@
 // ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors
 
+import 'package:demoapp/core/utils/app_colors.dart';
+import 'package:demoapp/core/utils/app_images.dart';
 import 'package:flutter/material.dart';
 
-class Phone_OTP extends StatelessWidget {
+class phoneOtpScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData.fallback(),
+      ),
       body: SafeArea(
-        child: SizedBox(
+        child: Container(
+          color: Colors.white,
           width: double.infinity,
           child: SingleChildScrollView(
             child: Stack(
@@ -18,19 +26,19 @@ class Phone_OTP extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       SizedBox(
-                        height: 50,
+                        height: 5,
                       ),
                       Image.asset(
-                        "assets/images/email_otp.png",
+                        AppImages.phoneOTPImage,
                         height: 300,
                       ),
                       Container(
-                        padding: EdgeInsets.fromLTRB(0, 5, 10, 5),
+                        padding: EdgeInsets.fromLTRB(0, 0, 10, 10),
                         child: Text(
                           "Phone Verification",
                           style: TextStyle(
-                            fontSize: 23,
-                            color: Colors.grey[900],
+                            fontSize: 25,
+                            color: AppColors.headerGrey,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -41,7 +49,8 @@ class Phone_OTP extends StatelessWidget {
                           "Don't worry, happens to the best of us!",
                           style: TextStyle(
                             fontSize: 15,
-                            color: Colors.grey[900],
+                            fontFamily: "Nexa",
+                            color: AppColors.SubtitleGrey,
                           ),
                         ),
                       ),
@@ -50,8 +59,7 @@ class Phone_OTP extends StatelessWidget {
                       ),
                       Container(
                         decoration: BoxDecoration(
-                          
-                          color: Colors.grey[300],
+ border: Border.all(color: AppColors.borderlightBlue),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         width: 340,
@@ -62,7 +70,7 @@ class Phone_OTP extends StatelessWidget {
                           decoration: InputDecoration(
                             icon: Icon(
                               Icons.call,
-                              color: Colors.blue[800],
+                              color: AppColors.lightBlue,
                             ),
                             border: InputBorder.none,
                             hintText: "Phone",
@@ -72,7 +80,7 @@ class Phone_OTP extends StatelessWidget {
                               },
                               icon: const Icon(
                                 Icons.send_rounded,
-                                color: Colors.blueAccent,
+                                color: AppColors.lightBlue,
                               ),
                             ),
                           ),
@@ -83,7 +91,7 @@ class Phone_OTP extends StatelessWidget {
                       ),
                       Container(
                         decoration: BoxDecoration(
-                          color: Colors.grey[300],
+ border: Border.all(color: AppColors.borderlightBlue),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         width: 340,
@@ -92,7 +100,7 @@ class Phone_OTP extends StatelessWidget {
                           decoration: InputDecoration(
                             icon: Icon(
                               Icons.app_registration,
-                              color: Colors.blue[800],
+                              color: AppColors.lightBlue,
                             ),
                             hintText: "OTP",
                             border: InputBorder.none,
@@ -111,9 +119,11 @@ class Phone_OTP extends StatelessWidget {
                           // Implement your logic here for OTP verification
                         },
                         style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(Colors.blue),
+                          backgroundColor:
+                              MaterialStateProperty.all(AppColors.darkBlue,),
                           padding: MaterialStateProperty.all(
-                              EdgeInsets.symmetric(horizontal: 135, vertical: 10)),
+                              EdgeInsets.symmetric(
+                                  horizontal: 135, vertical: 10)),
                           shape: MaterialStateProperty.all(
                             RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),

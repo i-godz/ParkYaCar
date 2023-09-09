@@ -1,37 +1,24 @@
-// ignore_for_file: use_key_in_widget_constructors, unused_import
-
-import 'package:demoapp/pages/Login/email_forget_password.dart';
-import 'package:demoapp/pages/Login/login.dart';
-import 'package:demoapp/pages/Login/phone_forget_password.dart';
-import 'package:demoapp/pages/Login/update_password.dart';
-import 'package:demoapp/pages/Onboarding/onboarding.dart';
-import 'package:demoapp/pages/Register/register.dart';
-import 'package:demoapp/pages/Register/verify_registration.dart';
-import 'package:flutter/material.dart';
+import 'package:demoapp/core/utils/app_route.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
-void main() async{
-  runApp(MyApp());
+void main() async {
+    WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  WidgetsFlutterBinding.ensureInitialized();
+    runApp(const MyApp());
+
+
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: "/onboarding",
-      routes: {
-        "/onboarding": (context) =>  onboarding(),
-        "/login": (context) => const Login(),
-        "/register": (context) => const Register(),
-        "/email_otp": (context) => const Email_OTP(),
-        "/phone_otp": (context) => Phone_OTP(),
-        "/update_password": (context) =>   CreateNewPassword(),
-        "/verify_registration": (context) => const Verify_Registration(),
-      },
+      initialRoute: Routes.onboardingScreen,
+      onGenerateRoute: AppRoutes.generate,
     );
   }
 }

@@ -1,20 +1,23 @@
 // ignore_for_file: camel_case_types, library_private_types_in_public_api, prefer_final_fields, prefer_const_constructors, use_build_context_synchronously, avoid_print, unnecessary_new
 
+import 'package:demoapp/core/utils/app_colors.dart';
+import 'package:demoapp/core/utils/app_images.dart';
+import 'package:demoapp/features/Homepage/update_password.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:email_otp/email_otp.dart';
 
-class Email_OTP extends StatefulWidget {
-  const Email_OTP({Key? key}) : super(key: key);
+class emailOtpScreen extends StatefulWidget {
+  const emailOtpScreen({Key? key}) : super(key: key);
 
   @override
   _VerificationState createState() => _VerificationState();
 }
 
-class _VerificationState extends State<Email_OTP> {
+class _VerificationState extends State<emailOtpScreen> {
   late String email;
   final TextEditingController emailController = TextEditingController();
-  final TextEditingController otpController = TextEditingController(); 
+  final TextEditingController otpController = TextEditingController();
 
   EmailOTP myauth = EmailOTP();
   FirebaseAuth _auth = FirebaseAuth.instance;
@@ -71,9 +74,15 @@ class _VerificationState extends State<Email_OTP> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        iconTheme: IconThemeData.fallback(),
+        backgroundColor: Colors.white,
+        elevation: 0,
+      ),
       body: SafeArea(
         child: Scaffold(
-          body: SizedBox(
+          body: Container(
+            color: Colors.white,
             height: double.infinity,
             width: double.infinity,
             child: Stack(
@@ -84,29 +93,33 @@ class _VerificationState extends State<Email_OTP> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       SizedBox(
-                        height: 50,
+                        height: 5,
                       ),
                       Image.asset(
-                        "assets/images/email_otp.png",
+                        AppImages.enailOTPImage,
                         height: 300,
                       ),
                       SizedBox(
                         height: 10,
                       ),
                       Container(
-                        padding: EdgeInsets.fromLTRB(0, 5, 10, 5),
+                        padding: EdgeInsets.fromLTRB(0, 0, 10, 10),
                         child: Text(
                           "E-Mail Verification",
-                          style:
-                              TextStyle(fontSize: 30, color: Colors.grey[900]),
+                          style: TextStyle(
+                              fontSize: 25,
+                              color: AppColors.headerGrey,
+                              fontWeight: FontWeight.bold),
                         ),
                       ),
                       Container(
                         padding: EdgeInsets.only(right: 5),
                         child: Text(
                           "Don't worry, happens to the best of us!",
-                          style:
-                              TextStyle(fontSize: 15, color: Colors.grey[900]),
+                          style: TextStyle(
+                              fontSize: 15,
+                              color: AppColors.SubtitleGrey,
+                              fontFamily: "Nexa"),
                         ),
                       ),
                       SizedBox(
@@ -116,8 +129,8 @@ class _VerificationState extends State<Email_OTP> {
                         children: [
                           Container(
                             decoration: BoxDecoration(
-                              color: Colors.grey[300],
-                              borderRadius: BorderRadius.circular(10),
+ border: Border.all(color: AppColors.borderlightBlue),
+ borderRadius: BorderRadius.circular(10),
                             ),
                             width: 340,
                             padding: EdgeInsets.symmetric(horizontal: 16),
@@ -126,16 +139,14 @@ class _VerificationState extends State<Email_OTP> {
                               decoration: InputDecoration(
                                 icon: Icon(
                                   Icons.mail_outline_rounded,
-                                  color: Colors.blue[800],
+                                  color: AppColors.lightBlue,
                                 ),
                                 suffixIcon: IconButton(
                                     onPressed: () async {
                                       _sendOTP(); // Call the send OTP function
                                     },
-                                    icon: const Icon(
-                                      Icons.send_rounded,
-                                      color: Colors.blueAccent,
-                                    )),
+                                    icon: const Icon(Icons.send_rounded,
+                                        color: AppColors.lightBlue)),
                                 hintText: "Email",
                                 border: InputBorder.none,
                               ),
@@ -150,7 +161,7 @@ class _VerificationState extends State<Email_OTP> {
                           ),
                           Container(
                             decoration: BoxDecoration(
-                              color: Colors.grey[300],
+                              border: Border.all(color: AppColors.borderlightBlue),
                               borderRadius: BorderRadius.circular(10),
                             ),
                             width: 340,
@@ -160,7 +171,7 @@ class _VerificationState extends State<Email_OTP> {
                               decoration: InputDecoration(
                                 icon: Icon(
                                   Icons.app_registration,
-                                  color: Colors.blue[800],
+                                  color: AppColors.lightBlue,
                                 ),
                                 hintText: "OTP",
                                 border: InputBorder.none,
@@ -176,12 +187,18 @@ class _VerificationState extends State<Email_OTP> {
                       SizedBox(
                         height: 23,
                       ),
-                      ElevatedButton(
-                        onPressed: () async {
-                          if (await myauth.verifyOTP(otp: otpController.text) ==
-                              true) {
-                            Navigator.pushNamed(context, "/update_password");
-                          } else {
+ElevatedButton(
+  onPressed: () async {
+    if (await myauth.verifyOTP(otp: otpController.text)) {
+      setState(() {
+      });
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => updatePasswordScreen(),
+        ),
+      );
+    } else {
                             ScaffoldMessenger.of(context)
                                 .showSnackBar(const SnackBar(
                               content: Text("Invalid OTP"),
@@ -190,7 +207,7 @@ class _VerificationState extends State<Email_OTP> {
                         },
                         style: ButtonStyle(
                           backgroundColor:
-                              MaterialStateProperty.all(Colors.blue),
+                              MaterialStateProperty.all(AppColors.darkBlue),
                           padding: MaterialStateProperty.all(
                               EdgeInsets.symmetric(
                                   horizontal: 135, vertical: 10)),
