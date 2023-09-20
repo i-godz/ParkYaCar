@@ -21,6 +21,7 @@ class _RegisterState extends State<registerScreen> {
   late String email;
   late String phone;
   late String password;
+  late String uId = "";
 
 // Function to handle the signup process
   Signup() async {
@@ -63,6 +64,8 @@ class _RegisterState extends State<registerScreen> {
           email: email,
           password: password,
         );
+        uId = userCredential!.user!.uid;
+
         // Send email verification link
         await userCredential.user!.sendEmailVerification();
         Navigator.pushNamed(context, Routes.verifyRegistrationScreen);
@@ -185,7 +188,9 @@ class _RegisterState extends State<registerScreen> {
             child: Text(
               "Register now & park smarter!",
               style: TextStyle(
-                  fontSize: 15, color: AppColors.SubtitleGrey, fontFamily: "Nexa"),
+                  fontSize: 15,
+                  color: AppColors.SubtitleGrey,
+                  fontFamily: "Nexa"),
             ),
           ),
           Container(
@@ -290,7 +295,8 @@ class _RegisterState extends State<registerScreen> {
             padding: EdgeInsets.fromLTRB(49, 0, 0, 0),
             child: Row(
               children: [
-                Text("Already have an accout? ", style: TextStyle(color: AppColors.headerGrey)),
+                Text("Already have an accout? ",
+                    style: TextStyle(color: AppColors.headerGrey)),
                 GestureDetector(
                   onTap: () {
                     Navigator.pushNamed(context, Routes.loginScreen);
@@ -314,7 +320,10 @@ class _RegisterState extends State<registerScreen> {
               onPressed: () async {
                 UserCredential? response = await Signup();
                 if (response != null) {
-                  await FirebaseFirestore.instance.collection("users").add({
+                  await FirebaseFirestore.instance
+                      .collection("users")
+                      .doc(uId)
+                      .set({
                     "name": fullName,
                     "email": email,
                     "phone": phone,

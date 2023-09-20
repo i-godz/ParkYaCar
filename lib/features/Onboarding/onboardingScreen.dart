@@ -1,12 +1,20 @@
-// ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, camel_case_types
+// ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, camel_case_types, unused_local_variable
 
+import 'package:demoapp/cache_helper.dart';
 import 'package:demoapp/core/utils/app_colors.dart';
 import 'package:demoapp/core/utils/app_images.dart';
 import 'package:demoapp/core/utils/app_route.dart';
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
-class onboardingScreen extends StatelessWidget {
+class onboardingScreen extends StatefulWidget {
+  @override
+  _onboardingScreenState createState() => _onboardingScreenState();
+}
+
+class _onboardingScreenState extends State<onboardingScreen> {
+  var pageControl = PageController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,10 +48,10 @@ class onboardingScreen extends StatelessWidget {
           ),
         ],
         onDone: () {
-          Navigator.pushNamed(context, Routes.loginScreen);
+          submit();
         },
         onSkip: () {
-          Navigator.pushNamed(context, Routes.loginScreen);
+          submit();
         },
         showSkipButton: true,
         skip: Text(
@@ -74,5 +82,13 @@ class onboardingScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(25.0))),
       ),
     ));
+  }
+
+  void submit() {
+    CacheHelper.saveData(key: 'onBoarding', value: true).then((value) {
+      if (value) {
+        Navigator.pushNamed(context, Routes.loginScreen);
+      }
+    });
   }
 }

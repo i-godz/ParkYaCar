@@ -4,18 +4,19 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:demoapp/core/utils/app_images.dart';
 import 'package:demoapp/features/Authentication/Login/loginScreen.dart';
 import 'package:demoapp/features/Authentication/Register/registerScreen.dart';
-import 'package:demoapp/features/Homepage/profile.dart';
+import 'package:demoapp/features/Homepage/Home/homepage.dart';
+import 'package:demoapp/features/Homepage/Profile/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:demoapp/core/utils/app_colors.dart';
 import 'package:demoapp/core/utils/app_route.dart';
 
-class homepageScreen extends StatefulWidget {
-  const homepageScreen({Key? key}) : super(key: key);
+class HomeNavigator extends StatefulWidget {
+  const HomeNavigator({Key? key}) : super(key: key);
   @override
-  _homepageScreenState createState() => _homepageScreenState();
+  _HomeNavigatorState createState() => _HomeNavigatorState();
 }
 
-class _homepageScreenState extends State<homepageScreen> {
+class _HomeNavigatorState extends State<HomeNavigator> {
   int index = 1;
   final GlobalKey _bottomNavigationKey = GlobalKey();
 
@@ -65,7 +66,7 @@ class _homepageScreenState extends State<homepageScreen> {
       case 0:
         return const loginScreen();
       case 1:
-        return const registerScreen();
+        return const homeScreen();
       case 2:
       default:
         return ProfileScreen();

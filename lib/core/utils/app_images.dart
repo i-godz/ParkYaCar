@@ -36,6 +36,7 @@ static const String OpencameraIcon = "assets/icons/OpencameraIcon.png";
 
 // Profile Screen
 static const String userPicture = "assets/images/ProfileImage.png";
+static const String profileCircle = "assets/images/profileCircle.png";
 static const String cameraIcon = "assets/icons/cameraIcon.png";
 static const String userIcon = "assets/icons/userIcon.png";
 static const String notificationsettingIcon = "assets/icons/notificationsettingIcon.png";
@@ -43,11 +44,6 @@ static const String logoutIcon = "assets/icons/logoutIcon.png";
 static const String settingsIcon = "assets/icons/settingsIcon.png";
 static const String paymentIcon = "assets/icons/paymentIcon.png";
 static const String reviewIcon = "assets/icons/reviewIcon.png";
-
-
-
-
-
 
 }
 
