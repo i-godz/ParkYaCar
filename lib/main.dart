@@ -1,4 +1,4 @@
-// ignore_for_file: unused_local_variable, prefer_typing_uninitialized_variables
+// ignore_for_file: unused_local_variable, prefer_typing_uninitialized_variables, avoid_print
 
 import 'package:demoapp/cache_helper.dart';
 import 'package:demoapp/core/utils/app_route.dart';
@@ -8,37 +8,33 @@ import 'package:flutter/material.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await CacheHelper.init();
   var onboarding = CacheHelper.getData(key: 'onBoarding');
   var loginData = CacheHelper.getData(key: 'loginData');
 
-  print(onboarding);
-  print(loginData);
-
-var startScreen;
+  var startScreen;
   if (onboarding != null) {
     if (loginData != null) {
       startScreen = Routes.HomeNavigator;
     } else {
-      startScreen =  Routes.loginScreen;
+      startScreen = Routes.loginScreen;
     }
   } else {
-    startScreen =  Routes.onboardingScreen;
+    startScreen = Routes.onboardingScreen;
   }
   runApp(MyApp(
     startWidget: startScreen,
   ));
-
 }
 
 class MyApp extends StatelessWidget {
-final startWidget;
+  final startWidget;
   const MyApp({Key? key, this.startWidget}) : super(key: key);
-  
+
   @override
   Widget build(BuildContext context) {
-    return  MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       initialRoute: startWidget,
       onGenerateRoute: AppRoutes.generate,
