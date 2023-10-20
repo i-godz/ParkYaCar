@@ -2,8 +2,8 @@
 
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:demoapp/core/utils/app_images.dart';
-import 'package:demoapp/features/Authentication/Login/loginScreen.dart';
 import 'package:demoapp/features/Authentication/Register/registerScreen.dart';
+import 'package:demoapp/features/Homepage/Camera/Qr_Screen.dart';
 import 'package:demoapp/features/Homepage/Home/homepage.dart';
 import 'package:demoapp/features/Homepage/Profile/profile.dart';
 import 'package:flutter/material.dart';
@@ -64,7 +64,7 @@ class _HomeNavigatorState extends State<HomeNavigator> {
     // Implement logic to build different pages based on the index
     switch (index) {
       case 0:
-        return const loginScreen();
+        return  QrScreen();
       case 1:
         return const homeScreen();
       case 2:

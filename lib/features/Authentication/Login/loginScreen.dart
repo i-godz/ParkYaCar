@@ -4,6 +4,7 @@ import 'package:demoapp/cache_helper.dart';
 import 'package:demoapp/core/utils/app_colors.dart';
 import 'package:demoapp/core/utils/app_images.dart';
 import 'package:demoapp/core/utils/app_route.dart';
+import 'package:demoapp/features/Authentication/Login/Auth_Services.dart';
 import 'package:demoapp/features/Homepage/Home/bottomNavigator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -91,7 +92,8 @@ class _LoginState extends State<loginScreen> {
                         ),
                         Container(
                           decoration: BoxDecoration(
-                            border: Border.all(color: AppColors.borderlightBlue),
+                            border:
+                                Border.all(color: AppColors.borderlightBlue),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           width: 300,
@@ -116,7 +118,8 @@ class _LoginState extends State<loginScreen> {
                         ),
                         Container(
                           decoration: BoxDecoration(
-                            border: Border.all(color: AppColors.borderlightBlue),
+                            border:
+                                Border.all(color: AppColors.borderlightBlue),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           width: 300,
@@ -219,8 +222,8 @@ class _LoginState extends State<loginScreen> {
                                                 "Select one of the options given below to reset your password",
                                                 style: TextStyle(
                                                     fontFamily: "Nexa",
-                                                    color:
-                                                        AppColors.SubtitleGrey)),
+                                                    color: AppColors
+                                                        .SubtitleGrey)),
                                             SizedBox(
                                               height: 25.0,
                                             ),
@@ -233,12 +236,14 @@ class _LoginState extends State<loginScreen> {
                                                 padding: EdgeInsets.all(20.0),
                                                 decoration: BoxDecoration(
                                                     borderRadius:
-                                                        BorderRadius.circular(10),
+                                                        BorderRadius.circular(
+                                                            10),
                                                     color: Colors.grey[200]),
                                                 child: Row(
                                                   children: [
                                                     Icon(
-                                                      Icons.mail_outline_rounded,
+                                                      Icons
+                                                          .mail_outline_rounded,
                                                       size: 60,
                                                     ),
                                                     SizedBox(
@@ -253,7 +258,8 @@ class _LoginState extends State<loginScreen> {
                                                           "E-Mail",
                                                           style: TextStyle(
                                                               fontWeight:
-                                                                  FontWeight.bold,
+                                                                  FontWeight
+                                                                      .bold,
                                                               fontSize: 17),
                                                         ),
                                                         Text(
@@ -268,50 +274,6 @@ class _LoginState extends State<loginScreen> {
                                               ),
                                             ),
                                             SizedBox(height: 22),
-                                            GestureDetector(
-                                              onTap: () {
-                                                Navigator.pushNamed(context,
-                                                    Routes.phoneOtpScreen);
-                                              },
-                                              child: Container(
-                                                padding: EdgeInsets.all(20.0),
-                                                decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(10),
-                                                    color: Colors.grey[200]),
-                                                child: Row(
-                                                  children: [
-                                                    Icon(
-                                                      Icons
-                                                          .mobile_friendly_rounded,
-                                                      size: 60,
-                                                    ),
-                                                    SizedBox(
-                                                      width: 10,
-                                                    ),
-                                                    Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Text(
-                                                          "Mobile Number",
-                                                          style: TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight.bold,
-                                                              fontSize: 17),
-                                                        ),
-                                                        Text(
-                                                            "Reset via Phone Verification",
-                                                            style: TextStyle(
-                                                                fontFamily:
-                                                                    "Nexa")),
-                                                      ],
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
                                           ],
                                         ),
                                       ));
@@ -356,54 +318,54 @@ class _LoginState extends State<loginScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              GestureDetector(
-                                onTap: () {},
-                                child: Container(
-                                  padding: EdgeInsets.all(13),
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      border: Border.all(
-                                          color: AppColors.lightBlue, width: 1)),
-                                  child: SvgPicture.asset(
-                                    AppImages.facebookImage,
-                                    color: Colors.blue[700],
-                                    height: 27,
+                              Padding(
+                                padding: const EdgeInsets.only(left: 20.0),
+                                child: ElevatedButton(
+                                  style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(
+                                        AppColors.darkBlue),
+                                    padding: MaterialStateProperty.all(
+                                      EdgeInsets.symmetric(
+                                        horizontal: 57,
+                                        vertical: 10,
+                                      ),
+                                    ),
+                                    shape: MaterialStateProperty.all(
+                                      RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                    ),
+                                  ),
+                                  onPressed: () async {
+                                    await AuthService()
+                                        .signInWithGoogle(); // Sign in with Google
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => HomeNavigator(),
+                                      ),
+                                    );
+                                  },
+                                  child: Row(
+                                    children: <Widget>[
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 15.0),
+                                        child: SvgPicture.asset(
+                                          AppImages.googleImage,
+                                          height: 27,
+                                        ),
+                                      ),
+                                      Text(
+                                        "Continue with Google",
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),
                               SizedBox(
                                 width: 22,
-                              ),
-                              GestureDetector(
-                                onTap: () {},
-                                child: Container(
-                                  padding: EdgeInsets.all(13),
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      border: Border.all(
-                                          color: AppColors.lightBlue, width: 1)),
-                                  child: SvgPicture.asset(
-                                    AppImages.googleImage,
-                                    height: 27,
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                width: 22,
-                              ),
-                              GestureDetector(
-                                onTap: () {},
-                                child: Container(
-                                  padding: EdgeInsets.all(13),
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      border: Border.all(
-                                          color: AppColors.lightBlue, width: 1)),
-                                  child: SvgPicture.asset(
-                                    AppImages.appleImage,
-                                    height: 27,
-                                  ),
-                                ),
                               ),
                             ],
                           ),

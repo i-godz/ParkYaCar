@@ -1,4 +1,4 @@
-// ignore_for_file: camel_case_types, library_private_types_in_public_api, unused_label, avoid_print
+// ignore_for_file: camel_case_types, library_private_types_in_public_api, unused_label, avoid_print, unnecessary_null_comparison
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demoapp/core/utils/app_colors.dart';
@@ -18,6 +18,7 @@ class _HomeScreenState extends State<homeScreen> {
   final firestore = FirebaseFirestore.instance;
 
   String userName = "";
+String imageUrl = AppImages.userPicture;
 
   @override
   void initState() {
@@ -25,26 +26,37 @@ class _HomeScreenState extends State<homeScreen> {
     getData();
   }
 
-  void getData() async {
+Future<void> getData() async {
     User? user = _auth.currentUser;
     if (user != null) {
       final DocumentSnapshot userDocs =
           await firestore.collection("users").doc(user.uid).get();
-      Map<String, dynamic> data = userDocs.data() as Map<String, dynamic>;
-      String fullName = data["name"];
 
-      // Split the full name into words and take the first word as the first name
-      List<String> nameParts = fullName.split(" ");
-      if (nameParts.isNotEmpty) {
-        userName = nameParts[0];
-      } else {
-        userName = fullName; // If there are no spaces, use the full name
+      if (userDocs.exists) {
+        Map<String, dynamic>? data = userDocs.data() as Map<String, dynamic>?;
+
+        if (data != null) {
+          String fullName = data["name"];
+          List<String> nameParts = fullName.split(" ");
+          if (nameParts.isNotEmpty) {
+            userName = nameParts[0];
+          } else {
+            userName = fullName;
+          }
+
+          // Fetch the user's image URL
+String? userImageUrl = data["ProfileImage"] as String?;
+          if (userImageUrl != null) {
+            setState(() {
+              imageUrl = userImageUrl; // Update the imageUrl
+            });
+          }
+        }
       }
-
-      setState(() {});
     }
   }
-
+  
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,7 +107,7 @@ class _HomeScreenState extends State<homeScreen> {
                         Container(
                           padding: const EdgeInsets.fromLTRB(20, 63, 0, 0),
                           child: Text(
-                            "Hello,  $userName!",
+                            "Hello, $userName!",
                             style: const TextStyle(
                                 fontSize: 25,
                                 fontWeight: FontWeight.bold,
@@ -104,7 +116,7 @@ class _HomeScreenState extends State<homeScreen> {
                           ),
                         ),
                         Container(
-                          padding: const EdgeInsets.fromLTRB(13, 0, 0, 0),
+                          padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
                           child: const Text(
                             "Where to park today?",
                             style: TextStyle(
@@ -116,12 +128,15 @@ class _HomeScreenState extends State<homeScreen> {
                         ),
                       ],
                     ),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(50, 47, 0, 0),
-                      child: const Icon(
-                        Icons.notifications,
-                        color: Colors.white,
-                        size: 30,
+                    Expanded(
+                      child: Container(
+                            alignment: Alignment.centerRight,
+                        padding: const EdgeInsets.fromLTRB(0, 47, 20, 0),
+                        child: const Icon(
+                          Icons.notifications,
+                          color: Colors.white,
+                          size: 30,
+                        ),
                       ),
                     ),
                   ],

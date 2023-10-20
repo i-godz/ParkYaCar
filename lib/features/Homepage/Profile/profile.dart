@@ -1,15 +1,103 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: unused_local_variable, unused_field, unused_import, avoid_print, no_leading_underscores_for_local_identifiers
 
+import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demoapp/core/utils/app_colors.dart';
 import 'package:demoapp/core/utils/app_images.dart';
 import 'package:demoapp/core/utils/app_route.dart';
 import 'package:demoapp/features/Authentication/Login/loginScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:image_picker/image_picker.dart';
 
-class ProfileScreen extends StatelessWidget {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+class ProfileScreen extends StatefulWidget {
   ProfileScreen({Key? key}) : super(key: key);
+
+  @override
+  _ProfileScreenState createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  String? imageUrl; 
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseStorage _storage = FirebaseStorage.instance;
+  final TextEditingController ratingController =
+      TextEditingController(text: '0.0');
+  File? file;
+  Uint8List? _image;
+
+Future<void> updateUserData(double userRating, Uint8List? image) async {
+  User? user = _auth.currentUser;
+  if (user != null) {
+    try {
+      if (image != null) {
+        String imageUrl = await storeImage(user.uid, image);
+
+        // Update Firestore with the image link and user rating
+        await FirebaseFirestore.instance.collection("users").doc(user.uid).update({
+          "AppRating": userRating, // Updated field name to match Firestore
+          "ProfileImage": imageUrl,
+        });
+      } else {
+        // If no image is selected, update only the user rating
+        await FirebaseFirestore.instance.collection("users").doc(user.uid).update({
+          "AppRating": userRating, // Updated field name to match Firestore
+        });
+      }
+    } catch (e) {
+      print("Error updating Firestore: $e");
+    }
+  }
+}
+  pickImage(ImageSource source) async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? _file = await picker.pickImage(source: source);
+    if (_file != null) {
+      return await _file.readAsBytes();
+    }
+    print("No image Selected");
+  }
+
+void selectImage() async {
+  Uint8List img = await pickImage(ImageSource.gallery);
+  setState(() {
+    _image = img;
+  });
+  updateUserData(double.parse(ratingController.text), img);
+}
+
+Future<String> storeImage(String childName, Uint8List file) async {
+  Reference ref = _storage.ref().child(childName);
+  UploadTask uploadtask = ref.putData(file);
+  TaskSnapshot snapshot = await uploadtask;
+  String downloadUrl = await snapshot.ref.getDownloadURL();
+    print("Download URL: $downloadUrl"); 
+return downloadUrl;
+  }
+
+
+Future<void> fetchImageUrl() async {
+  User? user = _auth.currentUser;
+  if (user != null) {
+    DocumentSnapshot snapshot =
+        await FirebaseFirestore.instance.collection("users").doc(user.uid).get();
+    if (snapshot.exists) {
+      Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
+      setState(() {
+        imageUrl = data["ProfileImage"];
+      });
+    }
+  }
+}
+
+ @override
+  void initState() {
+    super.initState();
+    fetchImageUrl(); // Fetch the image URL when the widget is initialized.
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,9 +125,17 @@ class ProfileScreen extends StatelessWidget {
                       left: -90,
                       child: Image.asset(AppImages.profileCircle,
                           width: 290, height: 290)),
-                  const CircleAvatar(
-                    backgroundImage: AssetImage(AppImages.userPicture),
-                  ),
+                            _image != null
+                ? CircleAvatar(
+                    backgroundImage: MemoryImage(_image!),
+                  )
+                : (imageUrl != null
+                    ? CircleAvatar(
+                        backgroundImage: NetworkImage(imageUrl!), // Use the fetched URL
+                      )
+                    : const CircleAvatar(
+                        backgroundImage: AssetImage(AppImages.userPicture), // Default image
+                      )),
                   Positioned(
                     right: -16,
                     bottom: 0,
@@ -56,7 +152,9 @@ class ProfileScreen extends StatelessWidget {
                           ),
                           backgroundColor: const Color(0xFFF5F6F9),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          selectImage();
+                        },
                         child: Image.asset(
                           AppImages.cameraIcon,
                           width: 25,
@@ -71,25 +169,84 @@ class ProfileScreen extends StatelessWidget {
             ),
             const SizedBox(height: 50),
             ProfileMenu(
-              text: "Account Preferences",
+              text: "Account Info",
               icon: AppImages.userIcon,
               press: () {
+                Navigator.of(context).pushNamed(Routes.AccountPreferences);
               },
             ),
             ProfileMenu(
-              text: "Notifications",
-              icon: AppImages.notificationsettingIcon,
-              press: () {},
+              text: "About Us",
+              icon: AppImages.aboutUs,
+              press: () {
+                Navigator.of(context).pushNamed(Routes.aboutUs);
+              },
             ),
             ProfileMenu(
-              text: "Wallet",
-              icon: AppImages.paymentIcon,
-              press: () {},
+              text: "Help & Support",
+              icon: AppImages.issueIcon,
+              press: () {
+                Navigator.of(context).pushNamed(Routes.HelpandSupport);
+              },
             ),
             ProfileMenu(
               text: "Rate Us",
               icon: AppImages.reviewIcon,
-              press: () {},
+              press: () {
+                double userRating = 0; // Initialize the user's rating.
+
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: const Text("Your Feedback Matters!"),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Text(
+                            "We'd love to hear your thoughts about our app",
+                            style: TextStyle(fontFamily: "Nexa", fontSize: 15),
+                          ),
+                          const SizedBox(height: 20),
+                          RatingBar.builder(
+                            initialRating: userRating,
+                            minRating: 1,
+                            direction: Axis.horizontal,
+                            allowHalfRating: true,
+                            itemCount: 5,
+                            itemSize: 40,
+                            itemPadding:
+                                const EdgeInsets.symmetric(horizontal: 4.0),
+                            itemBuilder: (context, _) => const Icon(
+                              Icons.star,
+                              color: Colors.amber,
+                            ),
+                            onRatingUpdate: (rating) {
+                              userRating = rating; // Update the user's rating.
+                            },
+                          ),
+                        ],
+                      ),
+                      actions: <Widget>[
+                        TextButton(
+                          child: const Text("Close"),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        TextButton(
+                          child: const Text("Rate"),
+                          onPressed: () {
+                            // Handle the logic for submitting the rating here.
+                            updateUserData(double.parse(ratingController.text), _image);
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
             ),
             ProfileMenu(
               text: "Log Out",
@@ -128,7 +285,9 @@ class ProfileScreen extends StatelessWidget {
             TextButton(
               child: const Text('Logout'),
               onPressed: () async {
-                await _auth.signOut();
+                // GoogleSignIn googleSignIn = GoogleSignIn();
+                // googleSignIn.disconnect();
+                await FirebaseAuth.instance.signOut();
                 Navigator.of(context).pop(); // Close the dialog
 
                 Navigator.of(context).pushAndRemoveUntil(
@@ -136,10 +295,6 @@ class ProfileScreen extends StatelessWidget {
                   MaterialPageRoute(
                     builder: (BuildContext context) => const loginScreen(),
                   ),
-
-                  // this function should return true when we're done removing routes
-                  // but because we want to remove all other screens, we make it
-                  // always return false
                   (Route route) => false,
                 );
               },

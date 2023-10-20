@@ -334,7 +334,7 @@ class _RegisterState extends State<registerScreen> {
                 }
               },
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.blue),
+                backgroundColor: MaterialStateProperty.all(AppColors.lightBlue),
                 padding: MaterialStateProperty.all(
                   EdgeInsets.symmetric(horizontal: 0, vertical: 10),
                 ),
