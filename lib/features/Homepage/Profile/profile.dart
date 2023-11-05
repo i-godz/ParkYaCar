@@ -21,7 +21,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  String? imageUrl; 
+  String? imageUrl;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseStorage _storage = FirebaseStorage.instance;
   final TextEditingController ratingController =
@@ -29,71 +29,94 @@ class _ProfileScreenState extends State<ProfileScreen> {
   File? file;
   Uint8List? _image;
 
-Future<void> updateUserData(double userRating, Uint8List? image) async {
-  User? user = _auth.currentUser;
-  if (user != null) {
-    try {
-      if (image != null) {
-        String imageUrl = await storeImage(user.uid, image);
+  Future<void> updateUserData(double userRating, Uint8List? image) async {
+    User? user = _auth.currentUser;
+    if (user != null) {
+      try {
+        if (image != null) {
+          String imageUrl = await storeImage(user.uid, image);
 
-        // Update Firestore with the image link and user rating
-        await FirebaseFirestore.instance.collection("users").doc(user.uid).update({
-          "AppRating": userRating, // Updated field name to match Firestore
-          "ProfileImage": imageUrl,
-        });
-      } else {
-        // If no image is selected, update only the user rating
-        await FirebaseFirestore.instance.collection("users").doc(user.uid).update({
-          "AppRating": userRating, // Updated field name to match Firestore
-        });
+          // Update Firestore with the image link and user rating
+          await FirebaseFirestore.instance
+              .collection("users")
+              .doc(user.uid)
+              .update({
+            "AppRating": userRating, // Updated field name to match Firestore
+            "ProfileImage": imageUrl,
+          });
+        } else {
+          // If no image is selected, update only the user rating
+          await FirebaseFirestore.instance
+              .collection("users")
+              .doc(user.uid)
+              .update({
+            "AppRating": userRating, // Updated field name to match Firestore
+          });
+        }
+      } catch (e) {
+        print("Error updating Firestore: $e");
       }
-    } catch (e) {
-      print("Error updating Firestore: $e");
     }
   }
-}
-  pickImage(ImageSource source) async {
-    final ImagePicker picker = ImagePicker();
+
+pickImage(ImageSource source) async {
+  final ImagePicker picker = ImagePicker();
+  try {
     final XFile? _file = await picker.pickImage(source: source);
     if (_file != null) {
+      // Process the selected image here
       return await _file.readAsBytes();
+    } else {
+      print("No image selected");
     }
-    print("No image Selected");
-  }
-
-void selectImage() async {
-  Uint8List img = await pickImage(ImageSource.gallery);
-  setState(() {
-    _image = img;
-  });
-  updateUserData(double.parse(ratingController.text), img);
-}
-
-Future<String> storeImage(String childName, Uint8List file) async {
-  Reference ref = _storage.ref().child(childName);
-  UploadTask uploadtask = ref.putData(file);
-  TaskSnapshot snapshot = await uploadtask;
-  String downloadUrl = await snapshot.ref.getDownloadURL();
-    print("Download URL: $downloadUrl"); 
-return downloadUrl;
-  }
-
-
-Future<void> fetchImageUrl() async {
-  User? user = _auth.currentUser;
-  if (user != null) {
-    DocumentSnapshot snapshot =
-        await FirebaseFirestore.instance.collection("users").doc(user.uid).get();
-    if (snapshot.exists) {
-      Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
-      setState(() {
-        imageUrl = data["ProfileImage"];
-      });
-    }
+  } catch (e) {
+    print("Error picking or processing the image: $e");
+    // Handle the error as needed
   }
 }
 
- @override
+
+
+ void selectImage() async {
+  Uint8List? img = await pickImage(ImageSource.gallery);
+  if (img != null) {
+    setState(() {
+      _image = img;
+    });
+    updateUserData(double.parse(ratingController.text), img);
+  } else {
+    // Handle the case when no image is selected
+    print("No image selected");
+  }
+}
+
+
+  Future<String> storeImage(String childName, Uint8List file) async {
+    Reference ref = _storage.ref().child(childName);
+    UploadTask uploadtask = ref.putData(file);
+    TaskSnapshot snapshot = await uploadtask;
+    String downloadUrl = await snapshot.ref.getDownloadURL();
+    print("Download URL: $downloadUrl");
+    return downloadUrl;
+  }
+
+  Future<void> fetchImageUrl() async {
+    User? user = _auth.currentUser;
+    if (user != null) {
+      DocumentSnapshot snapshot = await FirebaseFirestore.instance
+          .collection("users")
+          .doc(user.uid)
+          .get();
+      if (snapshot.exists) {
+        Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
+        setState(() {
+          imageUrl = data["ProfileImage"];
+        });
+      }
+    }
+  }
+
+  @override
   void initState() {
     super.initState();
     fetchImageUrl(); // Fetch the image URL when the widget is initialized.
@@ -125,17 +148,19 @@ Future<void> fetchImageUrl() async {
                       left: -90,
                       child: Image.asset(AppImages.profileCircle,
                           width: 290, height: 290)),
-                            _image != null
-                ? CircleAvatar(
-                    backgroundImage: MemoryImage(_image!),
-                  )
-                : (imageUrl != null
-                    ? CircleAvatar(
-                        backgroundImage: NetworkImage(imageUrl!), // Use the fetched URL
-                      )
-                    : const CircleAvatar(
-                        backgroundImage: AssetImage(AppImages.userPicture), // Default image
-                      )),
+                  _image != null
+                      ? CircleAvatar(
+                          backgroundImage: MemoryImage(_image!),
+                        )
+                      : (imageUrl != null
+                          ? CircleAvatar(
+                              backgroundImage: NetworkImage(
+                                  imageUrl!), // Use the fetched URL
+                            )
+                          : const CircleAvatar(
+                              backgroundImage: AssetImage(
+                                  AppImages.userPicture), // Default image
+                            )),
                   Positioned(
                     right: -16,
                     bottom: 0,
@@ -238,7 +263,8 @@ Future<void> fetchImageUrl() async {
                           child: const Text("Rate"),
                           onPressed: () {
                             // Handle the logic for submitting the rating here.
-                            updateUserData(double.parse(ratingController.text), _image);
+                            updateUserData(
+                                double.parse(ratingController.text), _image);
                             Navigator.of(context).pop();
                           },
                         ),

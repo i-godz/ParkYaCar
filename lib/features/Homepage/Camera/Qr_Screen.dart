@@ -1,4 +1,4 @@
-// ignore_for_file: camel_case_types, library_private_types_in_public_api, unused_label, avoid_print
+// ignore_for_file: camel_case_types, library_private_types_in_public_api, unused_label, avoid_print, unused_local_variable
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demoapp/core/utils/app_colors.dart';
@@ -20,6 +20,8 @@ class _QrScreenState extends State<QrScreen> {
   final firestore = FirebaseFirestore.instance;
 
   String userName = "";
+  String imageUrl = '';
+
 
   @override
   void initState() {
@@ -27,39 +29,47 @@ class _QrScreenState extends State<QrScreen> {
     getData();
   }
 
-  void getData() async {
+  Future<void> getData() async {
     User? user = _auth.currentUser;
     if (user != null) {
       final DocumentSnapshot userDocs =
           await firestore.collection("users").doc(user.uid).get();
 
       if (userDocs.exists) {
-        // Check if the document exists before trying to access its data
         Map<String, dynamic>? data = userDocs.data() as Map<String, dynamic>?;
 
         if (data != null) {
           String fullName = data["name"];
-
-          // Split the full name into words and take the first word as the first name
           List<String> nameParts = fullName.split(" ");
           if (nameParts.isNotEmpty) {
             userName = nameParts[0];
           } else {
-            userName = fullName; // If there are no spaces, use the full name
+            userName = fullName;
           }
-        } else {
-          // Handle the case where data is null (optional)
-        }
-      } else {
-        // Handle the case where the document does not exist (optional)
-      }
 
-      setState(() {});
+          // Fetch the user's image URL
+          String? userImageUrl = data["ProfileImage"] as String?;
+          if (userImageUrl != null) {
+            setState(() {
+              imageUrl = userImageUrl; // Update the imageUrl
+            });
+          }
+        }
+      }
     }
   }
 
   @override
+  
   Widget build(BuildContext context) {
+      ImageProvider userImageProvider;
+
+    if (imageUrl.isNotEmpty) {
+      userImageProvider = NetworkImage(imageUrl);
+    } else {
+      userImageProvider = const AssetImage(AppImages.userPicture);
+    }
+
     return Scaffold(
       body: SafeArea(
         top: false,
@@ -94,10 +104,9 @@ class _QrScreenState extends State<QrScreen> {
                         child: Stack(
                           fit: StackFit.expand,
                           clipBehavior: Clip.none,
-                          children: const [
+                          children:  [
                             CircleAvatar(
-                              backgroundImage:
-                                  AssetImage(AppImages.userPicture),
+                              backgroundImage: userImageProvider,
                             ),
                           ],
                         ),

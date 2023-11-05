@@ -20,9 +20,10 @@ class AppImages {
 // Email Confirmation Screen
   static const String confirmedEmailImage = "assets/images/Confirmed-email.png";
 
-// HomePage Screen
+// HomePage Screen  
   static const String homeIcon = "assets/icons/homeIcon.png";
   static const String OpencameraIcon = "assets/icons/OpencameraIcon.png";
+  static const String lineIcon = "assets/icons/line.png";
 
 // Profile Screen
   static const String userPicture = "assets/images/user.png";

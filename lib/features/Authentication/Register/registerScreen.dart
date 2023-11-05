@@ -1,11 +1,18 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, deprecated_member_use, avoid_unnecessary_containers, library_private_types_in_public_api, avoid_print, unused_local_variable, use_build_context_synchronously, non_constant_identifier_names, unnecessary_null_comparison
 
+import 'dart:convert';
+import 'dart:typed_data';
+import 'dart:ui';
+
 import 'package:demoapp/core/utils/app_colors.dart';
 import 'package:demoapp/core/utils/app_images.dart';
 import 'package:demoapp/core/utils/app_route.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+
 
 class registerScreen extends StatefulWidget {
   const registerScreen({Key? key}) : super(key: key);
@@ -15,6 +22,8 @@ class registerScreen extends StatefulWidget {
 
 class _RegisterState extends State<registerScreen> {
   final auth = FirebaseAuth.instance;
+    final FirebaseStorage _storage = FirebaseStorage.instance;
+
   bool passwordVisible = false;
   GlobalKey<FormState> formstate = GlobalKey<FormState>();
   late String fullName;
@@ -161,6 +170,45 @@ class _RegisterState extends State<registerScreen> {
     }
     return userCredential; // Return the UserCredential or null
   }
+
+
+Future<String> generateQrImage(String text) async {
+  try {
+    final image = await QrPainter(
+      data: text, // Use the provided text
+      version: QrVersions.auto,
+      gapless: false,
+      color: Color.fromRGBO(0, 0, 0, 1.0),
+      emptyColor: Color.fromRGBO(255, 255, 255, 1.0),
+    ).toImage(200);
+    
+    final qrImage = await image.toByteData(format: ImageByteFormat.png);
+    
+    // Upload the QR code image to Firebase Storage
+    final downloadUrl = await storeImage("qr_codes/$text.png", qrImage!.buffer.asUint8List());
+
+    return downloadUrl;
+  } catch (e) {
+    rethrow;
+  }
+}
+
+  Future<String> storeImage(String childName, Uint8List file) async {
+    Reference ref = _storage.ref().child(childName);
+    UploadTask uploadtask = ref.putData(file);
+    TaskSnapshot snapshot = await uploadtask;
+    String downloadUrl = await snapshot.ref.getDownloadURL();
+    print("Download URL: $downloadUrl");
+    return downloadUrl;
+  }
+
+
+
+
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -320,6 +368,8 @@ class _RegisterState extends State<registerScreen> {
               onPressed: () async {
                 UserCredential? response = await Signup();
                 if (response != null) {
+String qrImage = await generateQrImage(email);
+
                   await FirebaseFirestore.instance
                       .collection("users")
                       .doc(uId)
@@ -327,7 +377,9 @@ class _RegisterState extends State<registerScreen> {
                     "name": fullName,
                     "email": email,
                     "phone": phone,
-                    "password": password
+                    "password": password,
+                    "qrCodeImage": qrImage, // Store the QR code image as a base64 string
+
                   });
                 } else {
                   print("Sign Up Faild");
