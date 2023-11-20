@@ -202,14 +202,6 @@ Future<String> generateQrImage(String text) async {
     return downloadUrl;
   }
 
-
-
-
-
-
-
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -379,7 +371,6 @@ String qrImage = await generateQrImage(email);
                     "phone": phone,
                     "password": password,
                     "qrCodeImage": qrImage, // Store the QR code image as a base64 string
-
                   });
                 } else {
                   print("Sign Up Faild");
@@ -402,7 +393,7 @@ String qrImage = await generateQrImage(email);
               ),
               child: Text(
                 "Register",
-                style: TextStyle(fontSize: 24),
+                style: TextStyle(fontSize: 24, color: Colors.white),
               ),
             ),
           ),

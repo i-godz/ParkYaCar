@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demoapp/core/utils/app_colors.dart';
 import 'package:demoapp/core/utils/app_images.dart';
 import 'package:demoapp/core/utils/app_route.dart';
+import 'package:demoapp/features/Homepage/Home/PaymentPage.dart';
 import 'package:demoapp/features/Homepage/Profile/profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -77,7 +78,7 @@ class _QrScreenState extends State<QrScreen> {
           children: [
             Container(
               width: double.infinity,
-              height: 120,
+              height: 130,
               decoration: const BoxDecoration(
                 color: AppColors.lightBlue,
                 borderRadius: BorderRadius.only(
@@ -138,17 +139,27 @@ class _QrScreenState extends State<QrScreen> {
                         ),
                       ],
                     ),
-                    Expanded(
-                      child: Container(
-                        alignment: Alignment.centerRight,
-                        padding: const EdgeInsets.fromLTRB(0, 47, 20, 0),
-                        child: const Icon(
-                          Icons.notifications,
-                          color: Colors.white,
-                          size: 30,
+                  Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            // Navigate to the other page when the container is pressed
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => PaymentScreen()),
+                            );
+                          },
+                          child: Container(
+                            alignment: Alignment.centerRight,
+                            padding: const EdgeInsets.fromLTRB(0, 50, 30, 0),
+                            child: const Icon(
+                              Icons.account_balance_wallet,
+                              color: Colors.white,
+                              size: 30,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
                   ],
                 ),
               ),

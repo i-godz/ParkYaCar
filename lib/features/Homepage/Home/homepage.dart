@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demoapp/core/utils/app_colors.dart';
 import 'package:demoapp/core/utils/app_images.dart';
+import 'package:demoapp/features/Homepage/Home/PaymentPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -74,7 +75,7 @@ class _HomeScreenState extends State<homeScreen> {
             children: [
               Container(
                 width: double.infinity,
-                height: 120,
+                height: 125,
                 decoration: const BoxDecoration(
                   color: AppColors.lightBlue,
                   borderRadius: BorderRadius.only(
@@ -137,13 +138,23 @@ class _HomeScreenState extends State<homeScreen> {
                         ],
                       ),
                       Expanded(
-                        child: Container(
-                          alignment: Alignment.centerRight,
-                          padding: const EdgeInsets.fromLTRB(0, 47, 20, 0),
-                          child: const Icon(
-                            Icons.notifications,
-                            color: Colors.white,
-                            size: 30,
+                        child: GestureDetector(
+                          onTap: () {
+                            // Navigate to the other page when the container is pressed
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => PaymentScreen()),
+                            );
+                          },
+                          child: Container(
+                            alignment: Alignment.centerRight,
+                            padding: const EdgeInsets.fromLTRB(0, 50, 30, 0),
+                            child: const Icon(
+                              Icons.account_balance_wallet,
+                              color: Colors.white,
+                              size: 30,
+                            ),
                           ),
                         ),
                       ),
@@ -154,37 +165,34 @@ class _HomeScreenState extends State<homeScreen> {
               Stack(
                 children: [
                   Container(
-                    margin: const EdgeInsets.fromLTRB(16, 200, 0, 0),
-                    child: const RotatedBox(
-                      quarterTurns:
-                          3, // Rotate text 90 degrees counterclockwise
-                      child: Text(
-                        "T W O            W A Y             T R A F F I C",
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.lightBlue,
-                          fontFamily: "Nexa",
-                        ),
+                    margin: const EdgeInsets.fromLTRB(100, 600, 0, 0),
+                    child: const Text(
+                      "T W O            W A Y             T R A F F I C",
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.lightBlue,
+                        fontFamily: "Nexa",
                       ),
                     ),
                   ),
+
                   Column(
                     children: [
                       Container(
-                        margin: const EdgeInsets.fromLTRB(40, 35, 0, 0),
+                        margin: const EdgeInsets.fromLTRB(175, 35, 0, 0),
                         child: const Text(
                           "Entry",
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
-                            color: AppColors.SubtitleGrey,
+                            color: AppColors.lightBlue,
                             fontFamily: "Nexa",
                           ),
                         ),
                       ),
                       Container(
-                        margin: const EdgeInsets.fromLTRB(40, 10, 0, 0),
+                        margin: const EdgeInsets.fromLTRB(175, 10, 0, 0),
                         child: Column(
                           children: [
                             const Icon(
@@ -355,57 +363,474 @@ class _HomeScreenState extends State<homeScreen> {
                       ),
                     ],
                   ),
-                  Container(
-                    margin: const EdgeInsets.fromLTRB(110, 300, 0, 0),
-                    child: const Row(
-                      children: [
-                        Icon(
-                          Icons
-                              .east, // Replace with the arrow down icon of your choice
-                          size: 24, // Adjust the size as needed
-                          color: AppColors.SubtitleGrey,
+
+// A1 - B1
+                  Stack(
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(230, 80, 0, 0),
+                        child: const Row(
+                          children: [
+                            Icon(
+                              Icons.horizontal_rule,
+                              size: 35,
+                              color: AppColors.SubtitleGrey,
+                            ),
+                            Icon(
+                              Icons.horizontal_rule,
+                              size: 35,
+                              color: AppColors.SubtitleGrey,
+                            ),
+                            Icon(
+                              Icons.horizontal_rule,
+                              size: 35,
+                              color: AppColors.SubtitleGrey,
+                            ),
+                            Icon(
+                              Icons.horizontal_rule,
+                              size: 35,
+                              color: AppColors.SubtitleGrey,
+                            ),
+                          ],
                         ),
-                        SizedBox(
-                          width: 10,
+                      ),
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(280, 130, 0, 0),
+                        child: const Text(
+                          'B1',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.lightBlue,
+                            fontFamily: "Nexa",
+                            fontSize: 20, // Adjust the font size as needed
+                          ),
                         ),
-                        Icon(
-                          Icons
-                              .horizontal_rule, // Replace with the arrow down icon of your choice
-                          size: 35, // Adjust the size as needed
-                          color: AppColors.SubtitleGrey,
+                      ),
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(15, 80, 0, 0),
+                        child: const Row(
+                          children: [
+                            Icon(
+                              Icons.horizontal_rule,
+                              size: 35,
+                              color: AppColors.SubtitleGrey,
+                            ),
+                            Icon(
+                              Icons.horizontal_rule,
+                              size: 35,
+                              color: AppColors.SubtitleGrey,
+                            ),
+                            Icon(
+                              Icons.horizontal_rule,
+                              size: 35,
+                              color: AppColors.SubtitleGrey,
+                            ),
+                            Icon(
+                              Icons.horizontal_rule,
+                              size: 35,
+                              color: AppColors.SubtitleGrey,
+                            ),
+                          ],
                         ),
-                        Icon(
-                          Icons
-                              .horizontal_rule, // Replace with the line icon of your choice
-                          size: 35, // Adjust the size as needed
-                          color: AppColors.SubtitleGrey,
+                      ),
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(70, 130, 0, 0),
+                        child: const Text(
+                          'A1',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.lightBlue,
+                            fontFamily: "Nexa",
+                            fontSize: 20, // Adjust the font size as needed
+                          ),
                         ),
-                        Icon(
-                          Icons
-                              .horizontal_rule, // Replace with the line icon of your choice
-                          size: 35, // Adjust the size as needed
-                          color: AppColors.SubtitleGrey,
+                      ),
+                    ],
+                  ),
+
+// A2 - B2
+                  Stack(
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(230, 170, 0, 0),
+                        child: const Row(
+                          children: [
+                            Icon(
+                              Icons.horizontal_rule,
+                              size: 35,
+                              color: AppColors.SubtitleGrey,
+                            ),
+                            Icon(
+                              Icons.horizontal_rule,
+                              size: 35,
+                              color: AppColors.SubtitleGrey,
+                            ),
+                            Icon(
+                              Icons.horizontal_rule,
+                              size: 35,
+                              color: AppColors.SubtitleGrey,
+                            ),
+                            Icon(
+                              Icons.horizontal_rule,
+                              size: 35,
+                              color: AppColors.SubtitleGrey,
+                            ),
+                          ],
                         ),
-                        Icon(
-                          Icons
-                              .horizontal_rule, // Replace with the line icon of your choice
-                          size: 35, // Adjust the size as needed
-                          color: AppColors.SubtitleGrey,
+                      ),
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(70, 225, 0, 0),
+                        child: const Text(
+                          'A2',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.lightBlue,
+                            fontFamily: "Nexa",
+                            fontSize: 20, // Adjust the font size as needed
+                          ),
                         ),
-                        Icon(
-                          Icons
-                              .horizontal_rule, // Replace with the line icon of your choice
-                          size: 35, // Adjust the size as needed
-                          color: AppColors.SubtitleGrey,
+                      ),
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(15, 170, 0, 0),
+                        child: const Row(
+                          children: [
+                            Icon(
+                              Icons.horizontal_rule,
+                              size: 35,
+                              color: AppColors.SubtitleGrey,
+                            ),
+                            Icon(
+                              Icons.horizontal_rule,
+                              size: 35,
+                              color: AppColors.SubtitleGrey,
+                            ),
+                            Icon(
+                              Icons.horizontal_rule,
+                              size: 35,
+                              color: AppColors.SubtitleGrey,
+                            ),
+                            Icon(
+                              Icons.horizontal_rule,
+                              size: 35,
+                              color: AppColors.SubtitleGrey,
+                            ),
+                          ],
                         ),
-                        Icon(
-                          Icons
-                              .horizontal_rule, // Replace with the line icon of your choice
-                          size: 35, // Adjust the size as needed
-                          color: AppColors.SubtitleGrey,
+                      ),
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(280, 225, 0, 0),
+                        child: const Text(
+                          'B2',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.lightBlue,
+                            fontFamily: "Nexa",
+                            fontSize: 20, // Adjust the font size as needed
+                          ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
+                  ),
+
+// A3 - B3
+                  Stack(
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(230, 260, 0, 0),
+                        child: const Row(
+                          children: [
+                            Icon(
+                              Icons.horizontal_rule,
+                              size: 35,
+                              color: AppColors.SubtitleGrey,
+                            ),
+                            Icon(
+                              Icons.horizontal_rule,
+                              size: 35,
+                              color: AppColors.SubtitleGrey,
+                            ),
+                            Icon(
+                              Icons.horizontal_rule,
+                              size: 35,
+                              color: AppColors.SubtitleGrey,
+                            ),
+                            Icon(
+                              Icons.horizontal_rule,
+                              size: 35,
+                              color: AppColors.SubtitleGrey,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(70, 310, 0, 0),
+                        child: const Text(
+                          'A3',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.lightBlue,
+                            fontFamily: "Nexa",
+                            fontSize: 20, // Adjust the font size as needed
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(15, 260, 0, 0),
+                        child: const Row(
+                          children: [
+                            Icon(
+                              Icons.horizontal_rule,
+                              size: 35,
+                              color: AppColors.SubtitleGrey,
+                            ),
+                            Icon(
+                              Icons.horizontal_rule,
+                              size: 35,
+                              color: AppColors.SubtitleGrey,
+                            ),
+                            Icon(
+                              Icons.horizontal_rule,
+                              size: 35,
+                              color: AppColors.SubtitleGrey,
+                            ),
+                            Icon(
+                              Icons.horizontal_rule,
+                              size: 35,
+                              color: AppColors.SubtitleGrey,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(280, 310, 0, 0),
+                        child: const Text(
+                          'B3',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.lightBlue,
+                            fontFamily: "Nexa",
+                            fontSize: 20, // Adjust the font size as needed
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  Stack(
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(230, 350, 0, 0),
+                        child: const Row(
+                          children: [
+                            Icon(
+                              Icons.horizontal_rule,
+                              size: 35,
+                              color: AppColors.SubtitleGrey,
+                            ),
+                            Icon(
+                              Icons.horizontal_rule,
+                              size: 35,
+                              color: AppColors.SubtitleGrey,
+                            ),
+                            Icon(
+                              Icons.horizontal_rule,
+                              size: 35,
+                              color: AppColors.SubtitleGrey,
+                            ),
+                            Icon(
+                              Icons.horizontal_rule,
+                              size: 35,
+                              color: AppColors.SubtitleGrey,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(15, 350, 0, 0),
+                        child: const Row(
+                          children: [
+                            Icon(
+                              Icons.horizontal_rule,
+                              size: 35,
+                              color: AppColors.SubtitleGrey,
+                            ),
+                            Icon(
+                              Icons.horizontal_rule,
+                              size: 35,
+                              color: AppColors.SubtitleGrey,
+                            ),
+                            Icon(
+                              Icons.horizontal_rule,
+                              size: 35,
+                              color: AppColors.SubtitleGrey,
+                            ),
+                            Icon(
+                              Icons.horizontal_rule,
+                              size: 35,
+                              color: AppColors.SubtitleGrey,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+
+// A4 - B4
+                  Stack(
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(230, 450, 0, 0),
+                        child: const Row(
+                          children: [
+                            Icon(
+                              Icons.horizontal_rule,
+                              size: 35,
+                              color: AppColors.SubtitleGrey,
+                            ),
+                            Icon(
+                              Icons.horizontal_rule,
+                              size: 35,
+                              color: AppColors.SubtitleGrey,
+                            ),
+                            Icon(
+                              Icons.horizontal_rule,
+                              size: 35,
+                              color: AppColors.SubtitleGrey,
+                            ),
+                            Icon(
+                              Icons.horizontal_rule,
+                              size: 35,
+                              color: AppColors.SubtitleGrey,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(70, 405, 0, 0),
+                        child: const Text(
+                          'A4',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.lightBlue,
+                            fontFamily: "Nexa",
+                            fontSize: 20, // Adjust the font size as needed
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(15, 450, 0, 0),
+                        child: const Row(
+                          children: [
+                            Icon(
+                              Icons.horizontal_rule,
+                              size: 35,
+                              color: AppColors.SubtitleGrey,
+                            ),
+                            Icon(
+                              Icons.horizontal_rule,
+                              size: 35,
+                              color: AppColors.SubtitleGrey,
+                            ),
+                            Icon(
+                              Icons.horizontal_rule,
+                              size: 35,
+                              color: AppColors.SubtitleGrey,
+                            ),
+                            Icon(
+                              Icons.horizontal_rule,
+                              size: 35,
+                              color: AppColors.SubtitleGrey,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(280, 405, 0, 0),
+                        child: const Text(
+                          'B4',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.lightBlue,
+                            fontFamily: "Nexa",
+                            fontSize: 20, // Adjust the font size as needed
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+
+// A5 - B5
+                  Stack(
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(230, 540, 0, 0),
+                        child: const Row(
+                          children: [
+                            Icon(
+                              Icons.horizontal_rule,
+                              size: 35,
+                              color: AppColors.SubtitleGrey,
+                            ),
+                            Icon(
+                              Icons.horizontal_rule,
+                              size: 35,
+                              color: AppColors.SubtitleGrey,
+                            ),
+                            Icon(
+                              Icons.horizontal_rule,
+                              size: 35,
+                              color: AppColors.SubtitleGrey,
+                            ),
+                            Icon(
+                              Icons.horizontal_rule,
+                              size: 35,
+                              color: AppColors.SubtitleGrey,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                          margin: const EdgeInsets.fromLTRB(250, 470, 0, 0),
+                          child: Image.asset(
+                            AppImages.carOne,
+                            width: 100, // Adjust the width as needed
+                            height: 100, // Adjust the height as needed
+                          )),
+                      Container(
+                        margin: const EdgeInsets.fromLTRB(15, 540, 0, 0),
+                        child: const Row(
+                          children: [
+                            Icon(
+                              Icons.horizontal_rule,
+                              size: 35,
+                              color: AppColors.SubtitleGrey,
+                            ),
+                            Icon(
+                              Icons.horizontal_rule,
+                              size: 35,
+                              color: AppColors.SubtitleGrey,
+                            ),
+                            Icon(
+                              Icons.horizontal_rule,
+                              size: 35,
+                              color: AppColors.SubtitleGrey,
+                            ),
+                            Icon(
+                              Icons.horizontal_rule,
+                              size: 35,
+                              color: AppColors.SubtitleGrey,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                          margin: const EdgeInsets.fromLTRB(30, 470, 0, 0),
+                          child: Image.asset(
+                            AppImages.carOne,
+                            width: 100, // Adjust the width as needed
+                            height: 100, // Adjust the height as needed
+                          ))
+                    ],
                   ),
                 ],
               )

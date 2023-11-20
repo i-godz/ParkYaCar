@@ -24,6 +24,11 @@ class AppImages {
   static const String homeIcon = "assets/icons/homeIcon.png";
   static const String OpencameraIcon = "assets/icons/OpencameraIcon.png";
   static const String lineIcon = "assets/icons/line.png";
+  static const String carOne = "assets/images/car-1.png";
+
+
+
+
 
 // Profile Screen
   static const String userPicture = "assets/images/user.png";
@@ -52,4 +57,12 @@ class AppImages {
 // Camera Screen
   static const String generateImage = "assets/icons/generate.png";
   static const String scanImage = "assets/icons/scan.png";
+
+
+// Payment Screens
+  static const String creditImage = "assets/images/Credit_Payment.png";
+
+
+
+
 }

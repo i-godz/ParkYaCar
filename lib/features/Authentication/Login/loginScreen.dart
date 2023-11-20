@@ -190,7 +190,7 @@ class _LoginState extends State<loginScreen> {
                           ),
                           child: Text(
                             "Login",
-                            style: TextStyle(fontSize: 24),
+                            style: TextStyle(fontSize: 24, color: Colors.white),
                           ),
                         ),
                         Container(

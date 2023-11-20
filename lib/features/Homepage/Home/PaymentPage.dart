@@ -1,97 +1,51 @@
+// ignore_for_file: use_full_hex_values_for_flutter_colors, library_private_types_in_public_api, use_key_in_widget_constructors, deprecated_member_use
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demoapp/core/utils/app_colors.dart';
 import 'package:demoapp/core/utils/app_images.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
-class AccountPreferences extends StatefulWidget {
+class PaymentScreen extends StatefulWidget {
   @override
-  _AccountPreferencesState createState() => _AccountPreferencesState();
+  _PaymentScreenState createState() => _PaymentScreenState();
 }
 
-class _AccountPreferencesState extends State<AccountPreferences> {
-  bool isEditing = false;
-  bool emailEditing = false;
+class _PaymentScreenState extends State<PaymentScreen> {
+  @override
+  final TextEditingController fullNameController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final firestore = FirebaseFirestore.instance;
+  bool isEditing = false;
 
-  final TextEditingController fullNameController = TextEditingController();
-  final TextEditingController userEmailController = TextEditingController();
-  final TextEditingController userNumberController = TextEditingController();
-
-  @override
   void initState() {
     super.initState();
     getData();
   }
 
-void getData() async {
-  User? user = _auth.currentUser;
-  if (user != null) {
-    final DocumentSnapshot userDocs =
-        await firestore.collection("users").doc(user.uid).get();
-    
-    if (userDocs.exists) {
-      Map<String, dynamic>? data = userDocs.data() as Map<String, dynamic>?;
-
-      if (data != null) {
-        if (data.containsKey("name")) {
-          fullNameController.text = data["name"];
-        }
-        if (data.containsKey("email")) {
-          userEmailController.text = data["email"];
-        }
-        if (data.containsKey("phone")) {
-          userNumberController.text = data["phone"];
-        }
-      } else {
-        // Handle the case where data is null (optional)
-      }
-    } else {
-      // Handle the case where the document does not exist (optional)
-    }
-
-    setState(() {});
-  }
-}
-
-
-  Future<void> updateUserData() async {
+  void getData() async {
     User? user = _auth.currentUser;
     if (user != null) {
-      try {
-        final DocumentSnapshot userDocs =
-            await firestore.collection("users").doc(user.uid).get();
-        if (userDocs.exists) {
-          Map<String, dynamic> data = userDocs.data() as Map<String, dynamic>;
+      final DocumentSnapshot userDocs =
+          await firestore.collection("users").doc(user.uid).get();
 
-          if (fullNameController.text != data["name"] ||
-              userNumberController.text != data["phone"]) {
-            // If any value is different, update Firebase data
-            await firestore.collection("users").doc(user.uid).update({
-              "name": fullNameController.text,
-              "phone": userNumberController.text,
-            });
-            // Update the local data to match the new values
-            setState(() {
-              data["name"] = fullNameController.text;
-              data["phone"] = userNumberController.text;
-            });
+      if (userDocs.exists) {
+        Map<String, dynamic>? data = userDocs.data() as Map<String, dynamic>?;
+
+        if (data != null) {
+          if (data.containsKey("name")) {
+            fullNameController.text = data["name"];
           }
+        } else {
+          // Handle the case where data is null (optional)
         }
-
-        // Disable editing after updating the data
-        setState(() {
-          isEditing = false;
-          emailEditing = false;
-        });
-      } catch (e) {
-        print("Error updating Firestore: $e");
+      } else {
+        // Handle the case where the document does not exist (optional)
       }
+      setState(() {});
     }
   }
 
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -105,29 +59,12 @@ void getData() async {
           color: AppColors.lightBlue,
         ),
         title: const Text(
-          "Account Info",
+          "Payment Details",
           style: TextStyle(
             color: AppColors.lightBlue,
             fontSize: 16,
           ),
         ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              setState(() {
-                emailEditing = emailEditing;
-                isEditing = !isEditing;
-              });
-            },
-            child: const Text(
-              "Edit",
-              style: TextStyle(
-                color: AppColors.lightBlue,
-                fontSize: 16,
-              ),
-            ),
-          ),
-        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(vertical: 10),
@@ -135,33 +72,11 @@ void getData() async {
           children: [
             Center(
               child: Image.asset(
-                AppImages.accountInfo,
+                AppImages.creditImage,
                 height: 250,
               ),
             ),
-            const SizedBox(height: 20),
-            Center(
-              child: Container(
-                width: 300,
-                decoration: BoxDecoration(
-                  border: Border.all(color: AppColors.borderlightBlue),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: TextFormField(
-                  enabled: emailEditing,
-                  controller: userEmailController,
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    focusedBorder: InputBorder.none,
-                    prefixIcon: Icon(
-                      Icons.mail_outline_rounded,
-                      color: AppColors.lightBlue,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 30),
             Center(
               child: Container(
                 width: 300,
@@ -183,7 +98,7 @@ void getData() async {
                 ),
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 30),
             Center(
               child: Container(
                 width: 300,
@@ -193,28 +108,68 @@ void getData() async {
                 ),
                 child: TextFormField(
                   enabled: isEditing,
-                  controller: userNumberController,
                   decoration: const InputDecoration(
                     border: InputBorder.none,
                     focusedBorder: InputBorder.none,
                     prefixIcon: Icon(
-                      Icons.call,
+                      Icons.event_available,
                       color: AppColors.lightBlue,
                     ),
                   ),
                 ),
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 30),
+            Center(
+              child: Container(
+                width: 300,
+                decoration: BoxDecoration(
+                  border: Border.all(color: AppColors.borderlightBlue),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: TextFormField(
+                  enabled: isEditing,
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    prefixIcon: Icon(
+                      Icons.event_busy,
+                      color: AppColors.lightBlue,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 30),
+            Center(
+              child: Container(
+                width: 300,
+                decoration: BoxDecoration(
+                  border: Border.all(color: AppColors.borderlightBlue),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: TextFormField(
+                  enabled: isEditing,
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    prefixIcon: Icon(
+                      Icons.paid,
+                      color: AppColors.lightBlue,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 30),
             Container(
               padding: const EdgeInsets.fromLTRB(45, 0, 40, 0),
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {
-                  updateUserData();
-                },
+                onPressed: () {},
                 style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(AppColors.lightBlue),
+                  backgroundColor:
+                      MaterialStateProperty.all(AppColors.lightBlue),
                   padding: MaterialStateProperty.all(
                     const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
                   ),
@@ -229,7 +184,7 @@ void getData() async {
                   ),
                 ),
                 child: const Text(
-                  "Save",
+                  "Make Payment",
                   style: TextStyle(fontSize: 24, color: Colors.white),
                 ),
               ),

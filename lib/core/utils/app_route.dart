@@ -4,6 +4,7 @@ import 'package:demoapp/features/Authentication/Login/email_forget_password.dart
 import 'package:demoapp/features/Homepage/Camera/Generate_QrCode.dart';
 import 'package:demoapp/features/Homepage/Camera/Qr_Screen.dart';
 import 'package:demoapp/features/Homepage/Camera/Scan_QrCode.dart';
+import 'package:demoapp/features/Homepage/Home/PaymentPage.dart';
 import 'package:demoapp/features/Homepage/Home/bottomNavigator.dart';
 import 'package:demoapp/features/Homepage/Home/homepage.dart';
 import 'package:demoapp/features/Authentication/Login/loginScreen.dart';
@@ -37,13 +38,19 @@ class Routes {
   static const String aboutUs = "/aboutUs";
   static const String QrScreen = "/QrScreen";
   static const String GenerateQr = "/GenerateQr";
-    static const String ScanQr = "/ScanQr";
+  static const String ScanQr = "/ScanQr";
+  static const String Payment = "/Payment";
 
 }
 
 class AppRoutes {
   static Route<dynamic> generate(RouteSettings settings) {
     switch (settings.name) {
+
+      case Routes.Payment: // Add this case
+        return MaterialPageRoute(
+          builder: (context) => PaymentScreen(),
+        );
 
       case Routes.ScanQr: // Add this case
         return MaterialPageRoute(

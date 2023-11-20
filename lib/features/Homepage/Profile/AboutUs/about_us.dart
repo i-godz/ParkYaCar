@@ -63,7 +63,7 @@ class _AboutUsState extends State<aboutUs> {
               height: 20,
             ),
             SizedBox(
-              height: 50,
+              height: 15,
               width: 299,
               child: Row(
                 children: [
