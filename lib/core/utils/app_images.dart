@@ -26,17 +26,12 @@ class AppImages {
   static const String lineIcon = "assets/icons/line.png";
   static const String carOne = "assets/images/car-1.png";
 
-
-
-
-
-// Profile Screen
+//  Profile Screen
   static const String userPicture = "assets/images/user.png";
   static const String profileCircle = "assets/images/profileCircle.png";
   static const String cameraIcon = "assets/icons/cameraIcon.png";
   static const String userIcon = "assets/icons/userIcon.png";
-  static const String notificationsettingIcon =
-      "assets/icons/notificationsettingIcon.png";
+  static const String notificationsettingIcon = "assets/icons/notificationsettingIcon.png";
   static const String logoutIcon = "assets/icons/logoutIcon.png";
   static const String settingsIcon = "assets/icons/settingsIcon.png";
   static const String paymentIcon = "assets/icons/paymentIcon.png";
@@ -44,7 +39,11 @@ class AppImages {
   static const String issueIcon = "assets/icons/issueReport.png";
   static const String aboutUs = "assets/icons/aboutUs.png";
   static const String accountInfo = "assets/images/account_Info.png";
+  static const String removeAccount = "assets/icons/removeAccount.png";
+  static const String addAdmin = "assets/icons/addAdmin.png";
 
+
+ 
 // Help and Support
   static const String CheerUp = "assets/images/CheerUp.png";
   static const String FAQs = "assets/icons/faqs.png";

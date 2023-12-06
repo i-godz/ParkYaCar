@@ -3,8 +3,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demoapp/core/utils/app_colors.dart';
 import 'package:demoapp/core/utils/app_images.dart';
+import 'package:demoapp/features/Payment_Manager/Paymob_Manager.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PaymentScreen extends StatefulWidget {
   @override
@@ -17,6 +19,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final firestore = FirebaseFirestore.instance;
   bool isEditing = false;
+  int paidAmount = 5;
 
   void initState() {
     super.initState();
@@ -45,6 +48,18 @@ class _PaymentScreenState extends State<PaymentScreen> {
       setState(() {});
     }
   }
+
+
+   Future<void> _pay() async{
+    PaymobManager().getPaymentKey(
+      paidAmount,"EGP"
+    ).then((String paymentKey) {
+      launchUrl(
+        Uri.parse("https://accept.paymob.com/api/acceptance/iframes/801163?payment_token=$paymentKey"),
+      );
+    });
+   }
+
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -166,7 +181,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
               padding: const EdgeInsets.fromLTRB(45, 0, 40, 0),
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: _pay,
                 style: ButtonStyle(
                   backgroundColor:
                       MaterialStateProperty.all(AppColors.lightBlue),

@@ -3,7 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demoapp/core/utils/app_colors.dart';
 import 'package:demoapp/core/utils/app_images.dart';
-import 'package:demoapp/features/Homepage/Home/PaymentPage.dart';
+import 'package:demoapp/features/Homepage/Home/User/PaymentPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 

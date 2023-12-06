@@ -4,19 +4,20 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:demoapp/core/utils/app_images.dart';
 import 'package:demoapp/features/Authentication/Register/registerScreen.dart';
 import 'package:demoapp/features/Homepage/Camera/Qr_Screen.dart';
-import 'package:demoapp/features/Homepage/Home/homepage.dart';
-import 'package:demoapp/features/Homepage/Profile/profile.dart';
+import 'package:demoapp/features/Homepage/Home/Admin/Adminhomepage.dart';
+import 'package:demoapp/features/Homepage/Home/User/Userhomepage.dart';
+import 'package:demoapp/features/Homepage/Profile/Admin/AdminProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:demoapp/core/utils/app_colors.dart';
 import 'package:demoapp/core/utils/app_route.dart';
 
-class HomeNavigator extends StatefulWidget {
-  const HomeNavigator({Key? key}) : super(key: key);
+class AdminHomeNavigator extends StatefulWidget {
+  const AdminHomeNavigator({Key? key}) : super(key: key);
   @override
-  _HomeNavigatorState createState() => _HomeNavigatorState();
+  _AdminHomeNavigatorState createState() => _AdminHomeNavigatorState();
 }
 
-class _HomeNavigatorState extends State<HomeNavigator> {
+class _AdminHomeNavigatorState extends State<AdminHomeNavigator> {
   int index = 1;
   final GlobalKey _bottomNavigationKey = GlobalKey();
 
@@ -35,11 +36,10 @@ class _HomeNavigatorState extends State<HomeNavigator> {
             height: 45.0,
             index: index,
             items: <Widget>[
-              Image.asset(AppImages.OpencameraIcon,
-                  width: 30, height: 30, color: Colors.white),
+                            const Icon(Icons.settings, size: 30),
+
               Image.asset(AppImages.homeIcon,
                   width: 30, height: 30, color: Colors.white),
-              const Icon(Icons.account_circle, size: 30),
             ],
             color: AppColors.lightBlue,
             buttonBackgroundColor: AppColors.lightBlue,
@@ -64,12 +64,10 @@ class _HomeNavigatorState extends State<HomeNavigator> {
     // Implement logic to build different pages based on the index
     switch (index) {
       case 0:
-        return  QrScreen();
+        return AdminProfileScreen();
       case 1:
-        return const homeScreen();
-      case 2:
       default:
-        return ProfileScreen();
+        return AdminHomeScreen();
     }
   }
 }

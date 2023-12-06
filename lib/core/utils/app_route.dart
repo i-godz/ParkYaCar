@@ -4,21 +4,23 @@ import 'package:demoapp/features/Authentication/Login/email_forget_password.dart
 import 'package:demoapp/features/Homepage/Camera/Generate_QrCode.dart';
 import 'package:demoapp/features/Homepage/Camera/Qr_Screen.dart';
 import 'package:demoapp/features/Homepage/Camera/Scan_QrCode.dart';
-import 'package:demoapp/features/Homepage/Home/PaymentPage.dart';
-import 'package:demoapp/features/Homepage/Home/bottomNavigator.dart';
-import 'package:demoapp/features/Homepage/Home/homepage.dart';
+import 'package:demoapp/features/Homepage/Home/Admin/Adminhomepage.dart';
+import 'package:demoapp/features/Homepage/Home/User/PaymentPage.dart';
+import 'package:demoapp/features/Homepage/Home/User/bottomNavigator.dart';
+import 'package:demoapp/features/Homepage/Home/User/Userhomepage.dart';
 import 'package:demoapp/features/Authentication/Login/loginScreen.dart';
 import 'package:demoapp/features/Authentication/Login/phone_forget_password.dart';
 import 'package:demoapp/features/Authentication/Register/registerScreen.dart';
 import 'package:demoapp/features/Authentication/Register/verify_registration.dart';
-import 'package:demoapp/features/Homepage/Profile/AboutUs/about_us.dart';
-import 'package:demoapp/features/Homepage/Profile/Account_Preferences/AccountPreference.dart';
-import 'package:demoapp/features/Homepage/Profile/Help_&_Support/Help_&_Support.dart';
-import 'package:demoapp/features/Onboarding/onboardingScreen.dart';
+import 'package:demoapp/features/Homepage/Profile/Admin/Add_Admin_Account.dart';
+import 'package:demoapp/features/Homepage/Profile/Admin/AdminProfile.dart';
+import 'package:demoapp/features/Homepage/Profile/User/AboutUs/about_us.dart';
+import 'package:demoapp/features/Homepage/Profile/User/Account_Preferences/AccountPreference.dart';
+import 'package:demoapp/features/Homepage/Profile/User/Help_&_Support/Help_&_Support.dart';
 import 'package:demoapp/features/Homepage/Profile/profile.dart';
+import 'package:demoapp/features/Onboarding/onboardingScreen.dart';
 import 'package:flutter/material.dart';
-
-import '../../features/Homepage/Profile/Help_&_Support/FAQS.dart';
+import '../../features/Homepage/Profile/User/Help_&_Support/FAQS.dart';
 
 class Routes {
   static const String onboardingScreen = "/onboardingScreen";
@@ -40,12 +42,24 @@ class Routes {
   static const String GenerateQr = "/GenerateQr";
   static const String ScanQr = "/ScanQr";
   static const String Payment = "/Payment";
+  static const String AdminHomeScreen = "/AdminHomeScreen";
+  static const String AdminProfileScreen = "/AdminProfileScreen";
+  static const String Add_Admin_Account = "/Add_Admin_Account";
 
 }
-
 class AppRoutes {
   static Route<dynamic> generate(RouteSettings settings) {
     switch (settings.name) {
+
+ case Routes.Add_Admin_Account: // Add this case
+        return MaterialPageRoute(
+          builder: (context) =>  Add_Admin_Account(),
+        );
+
+      case Routes.AdminHomeScreen: // Add this case
+        return MaterialPageRoute(
+          builder: (context) => const AdminHomeScreen(),
+        );
 
       case Routes.Payment: // Add this case
         return MaterialPageRoute(
@@ -62,7 +76,7 @@ class AppRoutes {
         );
       case Routes.QrScreen: // Add this case
         return MaterialPageRoute(
-          builder: (context) => QrScreen(),
+          builder: (context) => const QrScreen(),
         );
 
       case Routes.aboutUs: // Add this case
@@ -72,7 +86,7 @@ class AppRoutes {
 
       case Routes.FAQs: // Add this case
         return MaterialPageRoute(
-          builder: (context) => FAQs(),
+          builder: (context) => const FAQs(),
         );
 
       case Routes.onboardingScreen:
@@ -110,6 +124,13 @@ class AppRoutes {
           builder: (context) => ProfileScreen(),
         );
 
+case Routes.AdminProfileScreen: // Add this case
+        return MaterialPageRoute(
+          builder: (context) => AdminProfileScreen(),
+        );
+
+
+
       case Routes.ResetPasswordScreen: // Add this case
         return MaterialPageRoute(
           builder: (context) => const ResetPasswordScreen(),
@@ -144,3 +165,5 @@ class AppRoutes {
     );
   }
 }
+
+

@@ -335,7 +335,7 @@ Future<String> generateQrImage(String text) async {
             padding: EdgeInsets.fromLTRB(49, 0, 0, 0),
             child: Row(
               children: [
-                Text("Already have an accout? ",
+                Text("Already have an account? ",
                     style: TextStyle(color: AppColors.headerGrey)),
                 GestureDetector(
                   onTap: () {

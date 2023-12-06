@@ -1,27 +1,28 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, deprecated_member_use, avoid_unnecessary_containers, library_private_types_in_public_api, unused_local_variable, avoid_print, unnecessary_null_comparison, use_build_context_synchronously, camel_case_types, non_constant_identifier_names
+// ignore_for_file: use_build_context_synchronously
 
-import 'package:demoapp/cache_helper.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demoapp/core/utils/app_colors.dart';
 import 'package:demoapp/core/utils/app_images.dart';
 import 'package:demoapp/core/utils/app_route.dart';
 import 'package:demoapp/features/Authentication/Login/Auth_Services.dart';
-import 'package:demoapp/features/Homepage/Home/bottomNavigator.dart';
+import 'package:demoapp/features/Homepage/Home/Admin/AdminBottomNavigator.dart';
+import 'package:demoapp/features/Homepage/Home/User/bottomNavigator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class loginScreen extends StatefulWidget {
   const loginScreen({Key? key}) : super(key: key);
+
   @override
   _LoginState createState() => _LoginState();
 }
 
 class _LoginState extends State<loginScreen> {
   final auth = FirebaseAuth.instance;
-  late String email;
-  late String password;
-  bool passwordVisible = false;
-  late bool newUser;
+  late bool passwordVisible;
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
 
   // Method to show an error dialog
   void showErrorDialog(String errorMessage) {
@@ -29,19 +30,25 @@ class _LoginState extends State<loginScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text("Login Error"),
+          title: const Text("Login Error"),
           content: Text(errorMessage),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text("OK"),
+              child: const Text("OK"),
             ),
           ],
         );
       },
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    passwordVisible = false;
   }
 
   @override
@@ -60,7 +67,7 @@ class _LoginState extends State<loginScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
                         Image.asset(
@@ -68,26 +75,28 @@ class _LoginState extends State<loginScreen> {
                           height: 250,
                         ),
                         Container(
-                          padding: EdgeInsets.fromLTRB(0, 0, 170, 0),
-                          child: Text(
+                          padding: const EdgeInsets.fromLTRB(0, 0, 170, 0),
+                          child: const Text(
                             "Welcome!",
                             style: TextStyle(
-                                fontSize: 25,
-                                color: AppColors.headerGrey,
-                                fontWeight: FontWeight.bold),
+                              fontSize: 25,
+                              color: AppColors.headerGrey,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                         Container(
-                          padding: EdgeInsets.fromLTRB(0, 4, 135, 0),
-                          child: Text(
+                          padding: const EdgeInsets.fromLTRB(0, 4, 135, 0),
+                          child: const Text(
                             "Login to your account",
                             style: TextStyle(
-                                fontSize: 15,
-                                color: AppColors.SubtitleGrey,
-                                fontFamily: "Nexa"),
+                              fontSize: 15,
+                              color: AppColors.SubtitleGrey,
+                              fontFamily: "Nexa",
+                            ),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
                         Container(
@@ -97,12 +106,12 @@ class _LoginState extends State<loginScreen> {
                             borderRadius: BorderRadius.circular(10),
                           ),
                           width: 300,
-                          padding: EdgeInsets.symmetric(horizontal: 16),
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
                           child: TextField(
                             onChanged: (value) {
-                              email = value;
+                              emailController.text = value;
                             },
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               focusedBorder: InputBorder.none,
                               border: InputBorder.none,
                               icon: Icon(
@@ -113,7 +122,7 @@ class _LoginState extends State<loginScreen> {
                             ),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 23,
                         ),
                         Container(
@@ -123,15 +132,15 @@ class _LoginState extends State<loginScreen> {
                             borderRadius: BorderRadius.circular(10),
                           ),
                           width: 300,
-                          padding: EdgeInsets.symmetric(horizontal: 16),
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
                           child: TextField(
                             onChanged: (value) {
-                              password = value;
+                              passwordController.text = value;
                             },
                             obscureText: !passwordVisible,
                             decoration: InputDecoration(
                               focusedBorder: InputBorder.none,
-                              icon: Icon(
+                              icon: const Icon(
                                 Icons.lock,
                                 color: AppColors.lightBlue,
                               ),
@@ -155,136 +164,180 @@ class _LoginState extends State<loginScreen> {
                             ),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 23,
                         ),
                         ElevatedButton(
                           onPressed: () async {
-                            try {
-                              var user = await auth.signInWithEmailAndPassword(
-                                  email: email, password: password);
-                              if (user != null) {
-                                CacheHelper.saveData(
-                                    key: "loginData", value: true);
-                                Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => HomeNavigator()));
+                            if (emailController.text.isNotEmpty &&
+                                passwordController.text.isNotEmpty) {
+                              try {
+                                UserCredential userCredential =
+                                    await FirebaseAuth.instance
+                                        .signInWithEmailAndPassword(
+                                  email: emailController.text,
+                                  password: passwordController.text,
+                                );
+                                // Fetch user role from Firestore based on user UID
+                                var snapshot = await FirebaseFirestore.instance
+                                    .collection('users')
+                                    .doc(userCredential.user!.uid)
+                                    .get();
+
+                                if (snapshot.exists) {
+                                  String role = snapshot.get('role');
+
+                                  // Redirect user based on role
+                                  if (role == "Admin") {
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const AdminHomeNavigator(),
+                                      ),
+                                    );
+                                  } else {
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const HomeNavigator(),
+                                      ),
+                                    );
+                                  }
+                                } else {
+                                  print(
+                                      'Document does not exist on the database');
+                                  // Handle the case where user data is not found
+                                }
+                              } on FirebaseAuthException catch (e) {
+                                // Handle authentication exceptions
+                                print('Authentication error: ${e.message}');
+                                // Show an error dialog with a message
+                                showErrorDialog(
+                                    "Invalid email or password. Please try again.");
                               }
-                            } catch (e) {
-                              print(e);
-                              // Show error dialog with a message
+                            } else {
                               showErrorDialog(
-                                  "Invalid email or password. Please register first.");
+                                  "Email and password cannot be empty.");
                             }
                           },
                           style: ButtonStyle(
                             backgroundColor:
                                 MaterialStateProperty.all(AppColors.darkBlue),
                             padding: MaterialStateProperty.all(
-                                EdgeInsets.symmetric(
-                                    horizontal: 120, vertical: 7)),
+                              const EdgeInsets.symmetric(
+                                  horizontal: 120, vertical: 7),
+                            ),
                             shape: MaterialStateProperty.all(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15))),
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                            ),
                           ),
-                          child: Text(
+                          child: const Text(
                             "Login",
                             style: TextStyle(fontSize: 24, color: Colors.white),
                           ),
                         ),
                         Container(
                           width: double.infinity,
-                          padding: EdgeInsets.only(left: 170),
+                          padding: const EdgeInsets.only(left: 170),
                           child: TextButton(
                             onPressed: () {
                               showModalBottomSheet(
-                                  context: context,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(30)),
-                                  builder: (context) => Container(
-                                        padding: EdgeInsets.all(30),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              "Make Selection!",
-                                              style: TextStyle(
-                                                  fontSize: 25,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: AppColors.headerGrey),
-                                            ),
-                                            SizedBox(
-                                              height: 4.0,
-                                            ),
-                                            Text(
-                                                "Select one of the options given below to reset your password",
-                                                style: TextStyle(
-                                                    fontFamily: "Nexa",
-                                                    color: AppColors
-                                                        .SubtitleGrey)),
-                                            SizedBox(
-                                              height: 25.0,
-                                            ),
-                                            GestureDetector(
-                                              onTap: () {
-                                                Navigator.pushNamed(context,
-                                                    Routes.ResetPasswordScreen);
-                                              },
-                                              child: Container(
-                                                padding: EdgeInsets.all(20.0),
-                                                decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
-                                                    color: Colors.grey[200]),
-                                                child: Row(
-                                                  children: [
-                                                    Icon(
-                                                      Icons
-                                                          .mail_outline_rounded,
-                                                      size: 60,
-                                                    ),
-                                                    SizedBox(
-                                                      width: 10,
-                                                    ),
-                                                    Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Text(
-                                                          "E-Mail",
-                                                          style: TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontSize: 17),
-                                                        ),
-                                                        Text(
-                                                            "Reset via E-Mail Verification",
-                                                            style: TextStyle(
-                                                                fontFamily:
-                                                                    "Nexa")),
-                                                      ],
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                            SizedBox(height: 22),
-                                          ],
+                                context: context,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
+                                builder: (context) => Container(
+                                  padding: const EdgeInsets.all(30),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        "Make Selection!",
+                                        style: TextStyle(
+                                          fontSize: 25,
+                                          fontWeight: FontWeight.bold,
+                                          color: AppColors.headerGrey,
                                         ),
-                                      ));
+                                      ),
+                                      const SizedBox(
+                                        height: 4.0,
+                                      ),
+                                      const Text(
+                                        "Select one of the options given below to reset your password",
+                                        style: TextStyle(
+                                          fontFamily: "Nexa",
+                                          color: AppColors.SubtitleGrey,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 25.0,
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.pushNamed(
+                                            context,
+                                            Routes.ResetPasswordScreen,
+                                          );
+                                        },
+                                        child: Container(
+                                          padding: const EdgeInsets.all(20.0),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            color: Colors.grey[200],
+                                          ),
+                                          child: const Row(
+                                            children: [
+                                              Icon(
+                                                Icons.mail_outline_rounded,
+                                                size: 60,
+                                              ),
+                                              SizedBox(
+                                                width: 10,
+                                              ),
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    "E-Mail",
+                                                    style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 17,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    "Reset via E-Mail Verification",
+                                                    style: TextStyle(
+                                                      fontFamily: "Nexa",
+                                                    ),
+                                                  ),
+                                                ],
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 22),
+                                    ],
+                                  ),
+                                ),
+                              );
                             },
                             child: Text(
                               "Forgot Password?",
                               style: TextStyle(
-                                  fontSize: 14,
-                                  fontFamily: "Nexa",
-                                  fontWeight: FontWeight.w400,
-                                  color: Colors.grey[900]),
+                                fontSize: 14,
+                                fontFamily: "Nexa",
+                                fontWeight: FontWeight.w400,
+                                color: Colors.grey[900],
+                              ),
                             ),
                           ),
                         ),
@@ -293,11 +346,12 @@ class _LoginState extends State<loginScreen> {
                           width: 299,
                           child: Row(
                             children: [
-                              Expanded(
-                                  child: Divider(
-                                thickness: 0.9,
-                                color: AppColors.darkBlue,
-                              )),
+                              const Expanded(
+                                child: Divider(
+                                  thickness: 0.9,
+                                  color: AppColors.darkBlue,
+                                ),
+                              ),
                               Text(
                                 "    OR    ",
                                 style: TextStyle(
@@ -305,16 +359,17 @@ class _LoginState extends State<loginScreen> {
                                   color: Colors.grey[700],
                                 ),
                               ),
-                              Expanded(
-                                  child: Divider(
-                                thickness: 0.9,
-                                color: AppColors.darkBlue,
-                              )),
+                              const Expanded(
+                                child: Divider(
+                                  thickness: 0.9,
+                                  color: AppColors.darkBlue,
+                                ),
+                              ),
                             ],
                           ),
                         ),
                         Container(
-                          margin: EdgeInsets.symmetric(vertical: 10),
+                          margin: const EdgeInsets.symmetric(vertical: 10),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -325,7 +380,7 @@ class _LoginState extends State<loginScreen> {
                                     backgroundColor: MaterialStateProperty.all(
                                         AppColors.darkBlue),
                                     padding: MaterialStateProperty.all(
-                                      EdgeInsets.symmetric(
+                                      const EdgeInsets.symmetric(
                                         horizontal: 57,
                                         vertical: 10,
                                       ),
@@ -337,12 +392,12 @@ class _LoginState extends State<loginScreen> {
                                     ),
                                   ),
                                   onPressed: () async {
-                                    await AuthService()
-                                        .signInWithGoogle(); // Sign in with Google
+                                    await AuthService().signInWithGoogle();
                                     Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => HomeNavigator(),
+                                        builder: (context) =>
+                                            const HomeNavigator(),
                                       ),
                                     );
                                   },
@@ -356,7 +411,7 @@ class _LoginState extends State<loginScreen> {
                                           height: 27,
                                         ),
                                       ),
-                                      Text(
+                                      const Text(
                                         "Continue with Google",
                                         style: TextStyle(color: Colors.white),
                                       ),
@@ -364,20 +419,20 @@ class _LoginState extends State<loginScreen> {
                                   ),
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 22,
                               ),
                             ],
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         Container(
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text(
+                              const Text(
                                 "Don't have an account? ",
                                 style: TextStyle(fontFamily: "Nexa"),
                               ),
@@ -386,16 +441,17 @@ class _LoginState extends State<loginScreen> {
                                   Navigator.pushNamed(
                                       context, Routes.registerScreen);
                                 },
-                                child: Text(
+                                child: const Text(
                                   "Register",
                                   style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: AppColors.darkBlue),
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.darkBlue,
+                                  ),
                                 ),
                               ),
                             ],
                           ),
-                        )
+                        ),
                       ],
                     ),
                   ),
