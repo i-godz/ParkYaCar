@@ -1,0 +1,83 @@
+{
+  "project_info": {
+    "project_number": "1069629988518",
+    "firebase_url": "https://smart-parking-5eff5-default-rtdb.firebaseio.com",
+    "project_id": "smart-parking-5eff5",
+    "storage_bucket": "smart-parking-5eff5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1069629988518:android:98956b860bc2e88a419e67",
+        "android_client_info": {
+          "package_name": "com.graduation.project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1069629988518-ilmbo9g2ig6diusvi3vno89ar8qa0dpt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAg34FjqNnogbuS8-0iOkipZ8fSYsFW0HA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1069629988518-4lnbnsdvbsa32eclt86n3s0utur5she6.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1069629988518-6r35da8t8rr2queeid0rpjp0qhi648m2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.demoapp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1069629988518:android:729915254ce86c47419e67",
+        "android_client_info": {
+          "package_name": "com.graduationproject.graduation.graduation"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1069629988518-ilmbo9g2ig6diusvi3vno89ar8qa0dpt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAg34FjqNnogbuS8-0iOkipZ8fSYsFW0HA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1069629988518-4lnbnsdvbsa32eclt86n3s0utur5she6.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1069629988518-6r35da8t8rr2queeid0rpjp0qhi648m2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.demoapp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
