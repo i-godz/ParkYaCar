@@ -17,7 +17,7 @@ void main() async {
     if (loginData != null) {
       startScreen = Routes.HomeNavigator;
     } else {
-      startScreen = Routes.loginScreen;
+      startScreen = Routes.Payment;
     }
   } else {
     startScreen = Routes.onboardingScreen;

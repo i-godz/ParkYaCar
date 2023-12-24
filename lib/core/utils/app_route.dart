@@ -19,9 +19,10 @@ import 'package:demoapp/features/Homepage/Profile/User/Account_Preferences/Accou
 import 'package:demoapp/features/Homepage/Profile/User/Help_&_Support/Help_&_Support.dart';
 import 'package:demoapp/features/Homepage/Profile/profile.dart';
 import 'package:demoapp/features/Onboarding/onboardingScreen.dart';
-import 'package:demoapp/features/Payment_Manager/Paymob_Manager.dart';
-import 'package:demoapp/features/Payment_Manager/paymentFailed.dart';
-import 'package:demoapp/features/Payment_Manager/paymentSuccess.dart';
+import 'package:demoapp/features/Payment_Manager/Paymob/Paymob_Manager.dart';
+import 'package:demoapp/features/Payment_Manager/Payment%20Status/paymentFailed.dart';
+import 'package:demoapp/features/Payment_Manager/Payment%20Status/paymentSuccess.dart';
+import 'package:demoapp/features/Payment_Manager/visaScreen.dart';
 import 'package:flutter/material.dart';
 import '../../features/Homepage/Profile/User/Help_&_Support/FAQS.dart';
 
@@ -56,13 +57,6 @@ class Routes {
 class AppRoutes {
   static Route<dynamic> generate(RouteSettings settings) {
     switch (settings.name) {
-
- // Modify the case where you navigate to PaymobWebView in AppRoutes class
-case Routes.PaymobWebView: // Add this case
-  return MaterialPageRoute(
-    builder: (context) => PaymobWebView(paymentKey: settings.arguments as String),
-  );
-
 
 case Routes.ApprovedPayment: // Add this case
         return MaterialPageRoute(
