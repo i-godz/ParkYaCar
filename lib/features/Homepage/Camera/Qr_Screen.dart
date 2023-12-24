@@ -94,6 +94,8 @@ class _QrScreenState extends State<QrScreen> {
             if (newStatus == "busy") {
               await firestore.collection("users").doc(user!.uid).update({
                 "time_in": Timestamp.fromDate(currentTime),
+                "slot": firestoreQRCode
+
               });
             } else {
 
@@ -107,6 +109,7 @@ DateTime timeIn = (slot.get("time_in") as Timestamp).toDate();
       await firestore.collection("users").doc(user!.uid).update({
         "time_out": Timestamp.fromDate(currentTime),
         "due_amount": fare,
+        "slot": null
 
               });
             }
@@ -164,15 +167,71 @@ DateTime timeIn = (slot.get("time_in") as Timestamp).toDate();
   }
 
   Future<void> scanQr() async {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => QRView(
-          key: GlobalKey(debugLabel: 'QR'),
-          onQRViewCreated: _onQRViewCreated,
-        ),
-      ),
-    );
+    try {
+      DocumentSnapshot userDoc =
+          await firestore.collection("users").doc(user!.uid).get();
+
+      double dueAmount = (userDoc.get("due_amount") ?? 0).toDouble();
+
+      if (dueAmount > 0) {
+        // If due amount is more than 0, show a dialog instructing the user to pay first.
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text(
+                "Payment Required",
+                style: TextStyle(color: AppColors.lightBlue),
+              ),
+              content: Text(
+                "Please pay the due amount of $dueAmount before parking again.",
+                style: TextStyle(fontSize: 16),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Close the dialog
+
+
+
+// Navigate to PaymentScreen
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PaymentScreen(),
+                ),
+              );
+
+
+
+
+                    
+                  },
+                  child: Text(
+                    "Pay Now",
+                    style: TextStyle(color: Colors.blue),
+                  ),
+                ),
+              ],
+            );
+          },
+        );
+      } else {
+        // If due amount is 0 or less, proceed with scanning.
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => QRView(
+              key: GlobalKey(debugLabel: 'QR'),
+              onQRViewCreated: _onQRViewCreated,
+            ),
+          ),
+        );
+      }
+    } catch (e) {
+      print('Error fetching user data: $e');
+      // Handle the error appropriately
+    }
   }
 
   @override

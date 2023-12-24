@@ -53,17 +53,17 @@ class _PaymentScreenState extends State<PaymentScreen> {
               inController.text = _formatDateTime(timeIn);
             }
 
-           if (data["due_amount"] != null) {
-  // Parse the value to a double
-  double dueAmountValue = double.parse(data["due_amount"].toString());
+            if (data["due_amount"] != null) {
+              // Parse the value to a double
+              double dueAmountValue =
+                  double.parse(data["due_amount"].toString());
 
-  // Assign the parsed value to due_amount
-  due_amount = dueAmountValue;
+              // Assign the parsed value to due_amount
+              due_amount = dueAmountValue;
 
-  // Set the text in the controller
-  amountController.text = dueAmountValue.toString();
-}
-
+              // Set the text in the controller
+              amountController.text = dueAmountValue.toString();
+            }
           }
         }
       } else {
@@ -73,46 +73,45 @@ class _PaymentScreenState extends State<PaymentScreen> {
     }
   }
 
-String _formatDateTime(DateTime dateTime) {
-  return DateFormat('yyyy-MM-dd \'at\' HH:mm').format(dateTime);
-}
-
-Future<void> _pay() async {
-  try {
-    if (due_amount != 0) {
-      String paymentKey = await PaymobManager().getPaymentKey(due_amount, "EGP", context);
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => PaymobWebView(paymentKey: paymentKey),
-        ),
-      );
-    } else {
-      // Show a dialog indicating no due amount
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text("No Due Amount"),
-            content: Text("There is no due amount to pay."),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text("OK"),
-              ),
-            ],
-          );
-        },
-      );
-    }
-  } catch (e) {
-    print("Exception occurred: $e");
-    // Handle the exception as needed
+  String _formatDateTime(DateTime dateTime) {
+    return DateFormat('yyyy-MM-dd \'at\' HH:mm').format(dateTime);
   }
-}
 
-
+  Future<void> _pay() async {
+    try {
+      if (due_amount != 0) {
+        String paymentKey =
+            await PaymobManager().getPaymentKey(due_amount, "EGP", context);
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => PaymobWebView(paymentKey: paymentKey),
+          ),
+        );
+      } else {
+        // Show a dialog indicating no due amount
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text("No Due Amount"),
+              content: Text("There is no due amount to pay."),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text("OK"),
+                ),
+              ],
+            );
+          },
+        );
+      }
+    } catch (e) {
+      print("Exception occurred: $e");
+      // Handle the exception as needed
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -154,6 +153,7 @@ Future<void> _pay() async {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: TextFormField(
+                  enabled: isEditing,
                   controller: fullNameController,
                   decoration: const InputDecoration(
                     border: InputBorder.none,
@@ -175,6 +175,7 @@ Future<void> _pay() async {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: TextFormField(
+                  enabled: isEditing,
                   controller: inController,
                   decoration: const InputDecoration(
                     border: InputBorder.none,
@@ -196,6 +197,7 @@ Future<void> _pay() async {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: TextFormField(
+                  enabled: isEditing,
                   controller: outController,
                   decoration: const InputDecoration(
                     border: InputBorder.none,
@@ -217,6 +219,7 @@ Future<void> _pay() async {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: TextFormField(
+                  enabled: isEditing,
                   controller: amountController,
                   decoration: const InputDecoration(
                     border: InputBorder.none,

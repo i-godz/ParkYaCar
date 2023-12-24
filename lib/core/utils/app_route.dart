@@ -3,7 +3,7 @@
 import 'package:demoapp/features/Authentication/Login/email_forget_password.dart';
 import 'package:demoapp/features/Homepage/Camera/Generate_QrCode.dart';
 import 'package:demoapp/features/Homepage/Camera/Qr_Screen.dart';
-import 'package:demoapp/features/Homepage/Camera/Scan_QrCode.dart';
+import 'package:demoapp/features/Homepage/Home/Admin/AdminBottomNavigator.dart';
 import 'package:demoapp/features/Homepage/Home/Admin/Adminhomepage.dart';
 import 'package:demoapp/features/Payment_Manager/PaymentPage.dart';
 import 'package:demoapp/features/Homepage/Home/User/HomeNavigator.dart';
@@ -19,10 +19,8 @@ import 'package:demoapp/features/Homepage/Profile/User/Account_Preferences/Accou
 import 'package:demoapp/features/Homepage/Profile/User/Help_&_Support/Help_&_Support.dart';
 import 'package:demoapp/features/Homepage/Profile/profile.dart';
 import 'package:demoapp/features/Onboarding/onboardingScreen.dart';
-import 'package:demoapp/features/Payment_Manager/Paymob/Paymob_Manager.dart';
 import 'package:demoapp/features/Payment_Manager/Payment%20Status/paymentFailed.dart';
 import 'package:demoapp/features/Payment_Manager/Payment%20Status/paymentSuccess.dart';
-import 'package:demoapp/features/Payment_Manager/visaScreen.dart';
 import 'package:flutter/material.dart';
 import '../../features/Homepage/Profile/User/Help_&_Support/FAQS.dart';
 
@@ -52,11 +50,26 @@ class Routes {
   static const String ApprovedPayment = "/ApprovedPayment";
   static const String FailurePayment = "/FailurePayment";
   static const String PaymobWebView = "/PaymobWebView";
+  static const String HelpandSuport = "/HelpandSuport";
+  static const String AdminHomeNavigator = "/AdminHomeNavigator";
 
 }
 class AppRoutes {
   static Route<dynamic> generate(RouteSettings settings) {
     switch (settings.name) {
+
+
+case Routes.AdminHomeNavigator: // Add this case
+        return MaterialPageRoute(
+          builder: (context) =>  AdminHomeNavigator(),
+        );
+
+
+
+case Routes.HelpandSuport: // Add this case
+        return MaterialPageRoute(
+          builder: (context) =>  HelpandSuport(),
+        );
 
 case Routes.ApprovedPayment: // Add this case
         return MaterialPageRoute(
@@ -83,10 +96,6 @@ case Routes.FailurePayment: // Add this case
           builder: (context) => PaymentScreen(),
         );
 
-      case Routes.ScanQr: // Add this case
-        return MaterialPageRoute(
-          builder: (context) => ScanQr(),
-        );
       case Routes.GenerateQr: // Add this case
         return MaterialPageRoute(
           builder: (context) => GenerateQr(),

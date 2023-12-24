@@ -207,7 +207,7 @@ class _AdminProfileScreen extends State<AdminProfileScreen> {
               text: "Open Gates",
               icon: AppImages.gateIcon,
               press: () {
-                showResetPasswordBottomSheet(context);
+                openGates(context);
               },
             ),
             ProfileMenu(
@@ -223,7 +223,7 @@ class _AdminProfileScreen extends State<AdminProfileScreen> {
     );
   }
 
-  void showResetPasswordBottomSheet(BuildContext context) {
+  void openGates(BuildContext context) {
     showModalBottomSheet(
       context: context,
       shape: RoundedRectangleBorder(
@@ -380,13 +380,13 @@ class _AdminProfileScreen extends State<AdminProfileScreen> {
                       TextButton(
                         onPressed: () async {
                           // Update the document to set the specified field to "closed"
-                          await gatesDocRef.update({fieldToUpdate: "closed"});
+                          // await gatesDocRef.update({fieldToUpdate: "closed"});
 
                           // Perform additional logic for closing the gate if needed
 
                           Navigator.of(dialogContext).pop();
                         },
-                        child: Text("Close Gate"),
+                        child: Text("Close"),
                       ),
                     ],
                   );

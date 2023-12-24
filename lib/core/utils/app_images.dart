@@ -52,6 +52,7 @@ class AppImages {
   static const String CheerUp = "assets/images/CheerUp.png";
   static const String FAQs = "assets/icons/faqs.png";
   static const String customerService = "assets/icons/customer-service.png";
+  static const String Forgot_my_parking = 'assets/images/Forgot my parking location.png';
 
 // Help and Support
   static const String twitterImage = "assets/icons/twitter.png";

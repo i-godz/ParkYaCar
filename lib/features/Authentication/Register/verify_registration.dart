@@ -104,7 +104,7 @@ class verifyRegistrationScreen extends StatelessWidget {
                     ),
                     child: const Text(
                       "Resend Link",
-                      style: TextStyle(fontSize: 16),
+                      style: TextStyle(fontSize: 16, color: Colors.white),
                     ),
                   ),
                 ),
@@ -167,7 +167,7 @@ class verifyRegistrationScreen extends StatelessWidget {
                     ),
                     child: const Text(
                       "Verified",
-                      style: TextStyle(fontSize: 16),
+                      style: TextStyle(fontSize: 16, color: Colors.white),
                     ),
                   ),
                 ),

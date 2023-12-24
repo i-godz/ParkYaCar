@@ -378,6 +378,7 @@ String qrImage = await generateQrImage(email);
                     "time_out": "",
                     "due_amount": "",
                     "role": "Customer",
+                    "ProfileImage": ""
                   });
                 } else {
                   print("Sign Up Faild");

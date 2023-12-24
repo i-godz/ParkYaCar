@@ -1,9 +1,11 @@
 // ignore_for_file: use_full_hex_values_for_flutter_colors, library_private_types_in_public_api, use_key_in_widget_constructors, avoid_print, deprecated_member_use
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demoapp/core/utils/app_colors.dart';
 import 'package:demoapp/core/utils/app_images.dart';
 import 'package:demoapp/core/utils/app_route.dart';
 import 'package:demoapp/features/Homepage/Profile/profile.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -13,6 +15,82 @@ class HelpandSuport extends StatefulWidget {
 }
 
 class _HelpandSuportState extends State<HelpandSuport> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final firestore = FirebaseFirestore.instance;
+
+  void showParkingLocationDialog() {
+    User? user = _auth.currentUser;
+    if (user != null) {
+      firestore.collection("users").doc(user.uid).get().then((userDocs) {
+        if (userDocs.exists) {
+          Map<String, dynamic>? data =
+              userDocs.data() as Map<String, dynamic>?;
+
+          if (data != null && data.containsKey("slot")) {
+            String? userSlot = data["slot"];
+
+            if (userSlot != null) {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text(
+                      "Parking Location",
+                      style: TextStyle(color: AppColors.lightBlue),
+                    ),
+                    content: Text(
+                      "Your parking slot is: $userSlot",
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop(); // Close the dialog
+                        },
+                        child: Text(
+                          "OK",
+                          style: TextStyle(color: Colors.blue),
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              );
+            } else {
+              // Handle case where slot is null
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text(
+                      "Parking Location",
+                      style: TextStyle(color: AppColors.lightBlue),
+                    ),
+                    content: Text(
+                      "You need to park first to get a parking slot.",
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop(); // Close the dialog
+                        },
+                        child: Text(
+                          "OK",
+                          style: TextStyle(color: Colors.blue),
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              );
+            }
+          }
+        }
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,7 +145,7 @@ class _HelpandSuportState extends State<HelpandSuport> {
                       fontSize: 15,
                       color: AppColors.headerGrey,
                       fontFamily: "Nexa"),
-                  textAlign: TextAlign.center, // Center-align the text
+                  textAlign: TextAlign.center,
                 ),
               ),
             ),
@@ -79,6 +157,13 @@ class _HelpandSuportState extends State<HelpandSuport> {
               icon: AppImages.FAQs,
               press: () {
                 Navigator.of(context).pushNamed(Routes.FAQs);
+              },
+            ),
+            ProfileMenu(
+              text: "Forgot my parking location",
+              icon: AppImages.Forgot_my_parking,
+              press: () {
+                showParkingLocationDialog();
               },
             ),
             ProfileMenu(
@@ -94,7 +179,7 @@ class _HelpandSuportState extends State<HelpandSuport> {
                   throw Exception('Could not launch SMS client');
                 }
               },
-            )
+            ),
           ],
         ),
       ),

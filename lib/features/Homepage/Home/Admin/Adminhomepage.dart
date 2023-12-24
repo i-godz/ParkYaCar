@@ -104,6 +104,16 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+  ImageProvider userImageProvider;
+
+    if (imageUrl.isNotEmpty) {
+      userImageProvider = NetworkImage(imageUrl);
+    } else {
+      userImageProvider = const AssetImage(AppImages.userPicture);
+    }
+
+
     return Scaffold(
       body: SafeArea(
         top: false,
@@ -118,81 +128,81 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                 slivers: [
                   SliverAppBar(
                     automaticallyImplyLeading: false,
-                    expandedHeight: 70,
+                    expandedHeight: 115,
                     flexibleSpace: Container(
-                      width: double.infinity,
-                      height: 125,
-                      decoration: const BoxDecoration(
-                        color: AppColors.lightBlue,
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(40.0),
-                          bottomRight: Radius.circular(40.0),
+                width: double.infinity,
+                height: 115,
+                decoration: const BoxDecoration(
+                  color: AppColors.lightBlue,
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(40.0),
+                    bottomRight: Radius.circular(40.0),
+                  ),
+                ),
+
+
+                child: Center(
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(25, 47, 0, 0),
+                        child: Container(
+                          width: 60,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: AppColors.lightBlue,
+                              width: 2,
+                            ),
+                          ),
+                          child: Stack(
+                            fit: StackFit.expand,
+                            clipBehavior: Clip.none,
+                            children: [
+                              CircleAvatar(
+                                backgroundImage: userImageProvider,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                      child: Center(
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(25, 47, 0, 0),
-                              child: Container(
-                                width: 60,
-                                height: 60,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                    color: AppColors.lightBlue,
-                                    width: 2,
-                                  ),
-                                ),
-                                child: const Stack(
-                                  fit: StackFit.expand,
-                                  clipBehavior: Clip.none,
-                                  children: [
-                                    CircleAvatar(
-                                        backgroundImage:
-                                            AssetImage(AppImages.userPicture)),
-                                  ],
-                                ),
+                      Column(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.fromLTRB(20, 55, 0, 0),
+                            child: Text(
+                              "Hello, $userName!",
+                              style: const TextStyle(
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                                fontFamily: "Nexa",
                               ),
                             ),
-                            Column(
-                              children: [
-                                Container(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(20, 63, 9, 0),
-                                  child: Text(
-                                    "Hello, $userName!",
-                                    style: const TextStyle(
-                                      fontSize: 25,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                      fontFamily: "Nexa",
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                  child: const Text(
-                                    "Welcome to your admin panel",
-                                    style: TextStyle(
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                      fontFamily: "Nexa",
-                                    ),
-                                  ),
-                                ),
-                              ],
+                          ),
+                          Container(
+                            padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+                            child: const Text(
+                              "Welcome to you're admin panel",
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                                fontFamily: "Nexa",
+                              ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                    ),
+                    ],
+                  ),
+                ),
+              ),
                   ),
                   // SizedBox for spacing
                   const SliverToBoxAdapter(
-                    child: SizedBox(height: 45),
+                    child: SizedBox(height: 30),
                   ),
 
                   SliverList(
