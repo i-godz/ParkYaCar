@@ -29,7 +29,7 @@ class _HelpandSuportState extends State<HelpandSuport> {
           if (data != null && data.containsKey("slot")) {
             String? userSlot = data["slot"];
 
-            if (userSlot != null) {
+            if (userSlot != null && userSlot.isNotEmpty) {
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
@@ -90,7 +90,7 @@ class _HelpandSuportState extends State<HelpandSuport> {
       });
     }
   }
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(

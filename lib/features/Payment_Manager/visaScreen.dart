@@ -40,6 +40,7 @@ class PaymobWebView extends StatelessWidget {
 onPageStarted: (String url) async {
   print('Page started loading: $url');
   if (url.contains('Approved')) {
+
     try {
       // Get the current user
       User? user = FirebaseAuth.instance.currentUser;
@@ -55,15 +56,26 @@ onPageStarted: (String url) async {
         var userDoc = await userDocRef.get();
 
         if (userDoc.exists) {
-          // Extract slot information from the user document
-          String userSlot = userDoc.get("slot") ?? "";
+         // Extract slot information from the user document
+        String userSlot = userDoc.get("slot") ?? "";
+        double dueAmount = userDoc.get("due_amount") ?? 0.0;
+        double bonus = userDoc.get("bonus") ?? 0.0;
+        // Calculate the bonus XP for the current transaction
+        double currentTransactionBonus = dueAmount * 0.10;
+        // Add the current transaction bonus to the existing bonus XP
+        double cumulativeBonusXP = bonus + currentTransactionBonus;
 
-          // Reference to the slot document
           var slotDocRef = FirebaseFirestore.instance.collection("slots").doc(userSlot);
+
+   // Update the bonus field in the user document
+          await userDocRef.update({
+            "bonus": cumulativeBonusXP
+          });
 
           // Update the user document
           await userDocRef.update({
             "due_amount": 0.0,
+            "slot": null,
             "time_in": null,
             "time_out": null,
           });
@@ -74,14 +86,27 @@ onPageStarted: (String url) async {
             "time_out": null,
           });
 
-          // Navigate to the success payment screen
+         // Generate a unique transaction ID
+          String transactionId = generateTransactionId(userSlot);
+
+         // Access the transaction collection and add a new document
+          FirebaseFirestore.instance.collection("transactions").doc(transactionId).set({
+            "UserID": userId,
+            "Transaction ID": transactionId,
+            "Customer": userDoc.get("name"),
+            "slot": userSlot,
+            "due_amount_paid": userDoc.get("due_amount") ?? 0.0,
+          });
+        }
+      }
+       // Navigate to the success payment screen
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => const ApprovedPayment()),
           );
-        }
-      }
-    } catch (e) {
+    } 
+    
+    catch (e) {
       print("Error updating Firestore: $e");
       // Handle the error as needed
     }
@@ -93,14 +118,19 @@ onPageStarted: (String url) async {
     );
   }
 },
-
-
         gestureNavigationEnabled: true,
         backgroundColor: Colors.transparent,
 
       ),
     );
   }
+
+String generateTransactionId(String userSlot) {
+  // Generate a unique transaction ID based on current timestamp and user slot
+  String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
+  return userSlot + '' + timestamp;
+}
+
 
   JavascriptChannel _toasterJavascriptChannel(BuildContext context) {
     return JavascriptChannel(
