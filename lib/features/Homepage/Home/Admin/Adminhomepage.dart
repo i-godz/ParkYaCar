@@ -104,15 +104,13 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-
-  ImageProvider userImageProvider;
+    ImageProvider userImageProvider;
 
     if (imageUrl.isNotEmpty) {
       userImageProvider = NetworkImage(imageUrl);
     } else {
       userImageProvider = const AssetImage(AppImages.userPicture);
     }
-
 
     return Scaffold(
       body: SafeArea(
@@ -130,75 +128,75 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                     automaticallyImplyLeading: false,
                     expandedHeight: 115,
                     flexibleSpace: Container(
-                width: double.infinity,
-                height: 115,
-                decoration: const BoxDecoration(
-                  color: AppColors.lightBlue,
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(40.0),
-                    bottomRight: Radius.circular(40.0),
-                  ),
-                ),
-
-
-                child: Center(
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(25, 47, 0, 0),
-                        child: Container(
-                          width: 60,
-                          height: 60,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: AppColors.lightBlue,
-                              width: 2,
-                            ),
-                          ),
-                          child: Stack(
-                            fit: StackFit.expand,
-                            clipBehavior: Clip.none,
-                            children: [
-                              CircleAvatar(
-                                backgroundImage: userImageProvider,
-                              ),
-                            ],
-                          ),
+                      width: double.infinity,
+                      height: 115,
+                      decoration: const BoxDecoration(
+                        color: AppColors.lightBlue,
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(40.0),
+                          bottomRight: Radius.circular(40.0),
                         ),
                       ),
-                      Column(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.fromLTRB(20, 55, 0, 0),
-                            child: Text(
-                              "Hello, $userName!",
-                              style: const TextStyle(
-                                fontSize: 25,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                fontFamily: "Nexa",
+                      child: Center(
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(25, 47, 0, 0),
+                              child: Container(
+                                width: 60,
+                                height: 60,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: AppColors.lightBlue,
+                                    width: 2,
+                                  ),
+                                ),
+                                child: Stack(
+                                  fit: StackFit.expand,
+                                  clipBehavior: Clip.none,
+                                  children: [
+                                    CircleAvatar(
+                                      backgroundImage: userImageProvider,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                          Container(
-                            padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                            child: const Text(
-                              "Welcome to you're admin panel",
-                              style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                fontFamily: "Nexa",
-                              ),
+                            Column(
+                              children: [
+                                Container(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(20, 55, 0, 0),
+                                  child: Text(
+                                    "Hello, $userName!",
+                                    style: const TextStyle(
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                      fontFamily: "Nexa",
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(20, 0, 0, 0),
+                                  child: const Text(
+                                    "Welcome to you're admin panel",
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                      fontFamily: "Nexa",
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ],
-                  ),
-                ),
-              ),
+                    ),
                   ),
                   // SizedBox for spacing
                   const SliverToBoxAdapter(
@@ -244,25 +242,21 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                             ),
                             subtitle: Text(
                               "Email: " + snapshot.data!.docs[i]["email"],
-                              style: const TextStyle(
-                                  color:
-                                      Colors.white),
-                                       // Set text color to white
+                              style: const TextStyle(color: Colors.white),
+                              // Set text color to white
                             ),
 
-
-  trailing: GestureDetector(
-      onTap: () {
-        deleteAdminAccount(context);
-      },
-      child: const Icon(
-        Icons.delete, // Replace with your desired icon
-        color: Colors.white,
-        size: 15
-      ),
-    ),
-    // Add more ListTile properties as needed
-  
+                            trailing: GestureDetector(
+                              onTap: () {
+                                deleteAdminAccount(context);
+                              },
+                              child: const Icon(
+                                  Icons
+                                      .delete, // Replace with your desired icon
+                                  color: Colors.white,
+                                  size: 15),
+                            ),
+                            // Add more ListTile properties as needed
                           ),
                         );
                       },
@@ -279,7 +273,6 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
         ),
       ),
     );
- 
   }
 
   Future<void> deleteAdminAccount(BuildContext context) async {

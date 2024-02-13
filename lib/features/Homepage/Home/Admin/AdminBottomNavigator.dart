@@ -4,6 +4,7 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:demoapp/core/utils/app_images.dart';
 import 'package:demoapp/features/Authentication/Register/registerScreen.dart';
 import 'package:demoapp/features/Homepage/Camera/Qr_Screen.dart';
+import 'package:demoapp/features/Homepage/Home/Admin/AdminSummary.dart';
 import 'package:demoapp/features/Homepage/Home/Admin/Adminhomepage.dart';
 import 'package:demoapp/features/Homepage/Home/User/Userhomepage.dart';
 import 'package:demoapp/features/Homepage/Profile/Admin/AdminProfile.dart';
@@ -36,10 +37,12 @@ class _AdminHomeNavigatorState extends State<AdminHomeNavigator> {
             height: 45.0,
             index: index,
             items: <Widget>[
-                            const Icon(Icons.settings, size: 30),
-
+              
               Image.asset(AppImages.homeIcon,
                   width: 30, height: 30, color: Colors.white),
+                  Image.asset(AppImages.report,
+                  width: 30, height: 30, color: Colors.white),
+              const Icon(Icons.settings, size: 30)
             ],
             color: AppColors.lightBlue,
             buttonBackgroundColor: AppColors.lightBlue,
@@ -64,10 +67,12 @@ class _AdminHomeNavigatorState extends State<AdminHomeNavigator> {
     // Implement logic to build different pages based on the index
     switch (index) {
       case 0:
-        return AdminProfileScreen();
-      case 1:
-      default:
         return AdminHomeScreen();
+      case 1:
+        return AdminSummary();
+      case 2:
+      default:
+        return AdminProfileScreen();
     }
   }
 }

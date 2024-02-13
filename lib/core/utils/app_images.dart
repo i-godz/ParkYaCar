@@ -25,6 +25,7 @@ class AppImages {
   static const String OpencameraIcon = "assets/icons/OpencameraIcon.png";
   static const String lineIcon = "assets/icons/line.png";
   static const String carOne = "assets/images/car-1.png";
+ static const String report = "assets/icons/report.png";
 
 //  Profile Screen
   static const String userPicture = "assets/images/user.png";
@@ -47,6 +48,9 @@ class AppImages {
  static const String bottomGateIcon = "assets/icons/gateIcon_2.png";
  static const String parkingHistory = "assets/icons/history.png";
  static const String noData = "assets/images/Nodata.png";
+ static const String cashPayment = "assets/icons/cashPayment.png";
+
+
 
 // Help and Support
   static const String CheerUp = "assets/images/CheerUp.png";

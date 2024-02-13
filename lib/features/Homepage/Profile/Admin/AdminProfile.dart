@@ -12,6 +12,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class AdminProfileScreen extends StatefulWidget {
   AdminProfileScreen({Key? key}) : super(key: key);
@@ -29,6 +30,8 @@ class _AdminProfileScreen extends State<AdminProfileScreen> {
       TextEditingController(text: '0.0');
   File? file;
   Uint8List? _image;
+  late QRViewController controller;
+  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
 
   Future<void> updateUserData(Uint8List? image) async {
     User? user = _auth.currentUser;
@@ -204,6 +207,13 @@ class _AdminProfileScreen extends State<AdminProfileScreen> {
               },
             ),
             ProfileMenu(
+              text: "Cash Payments",
+              icon: AppImages.cashPayment,
+              press: () {
+                scanQr();
+              },
+            ),
+            ProfileMenu(
               text: "Open Gates",
               icon: AppImages.gateIcon,
               press: () {
@@ -221,6 +231,34 @@ class _AdminProfileScreen extends State<AdminProfileScreen> {
         ),
       ),
     );
+  }
+
+  void _onQRViewCreated(QRViewController controller) {
+    setState(() {
+      this.controller = controller;
+    });
+    controller.scannedDataStream.listen((scanData) {
+      // Process the scanned QR code data
+      print('Scanned QR Code: ${scanData.code}');
+      // Add your code to process the scanned QR code data here
+    });
+  }
+
+  Future<void> scanQr() async {
+    try {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => QRView(
+            key: GlobalKey(debugLabel: 'QR'),
+            onQRViewCreated: _onQRViewCreated,
+          ),
+        ),
+      );
+    } catch (e) {
+      print('Error opening QR scanner: $e');
+      // Handle the error appropriately
+    }
   }
 
   void openGates(BuildContext context) {

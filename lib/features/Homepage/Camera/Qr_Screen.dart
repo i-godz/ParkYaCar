@@ -20,7 +20,7 @@ class _QrScreenState extends State<QrScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   bool qrCodeMatched = false;
-  late User? user;  // Declare user variable
+  late User? user; // Declare user variable
   String userName = "";
   String imageUrl = '';
 
@@ -32,16 +32,15 @@ class _QrScreenState extends State<QrScreen> {
     getData();
   }
 
- Future<void> getData() async {
+  Future<void> getData() async {
     try {
-      user = _auth.currentUser;  // Initialize the user variable
+      user = _auth.currentUser; // Initialize the user variable
       if (user != null) {
         final DocumentSnapshot userDocs =
             await firestore.collection("users").doc(user!.uid).get();
 
         if (userDocs.exists) {
-          Map<String, dynamic>? data =
-              userDocs.data() as Map<String, dynamic>?;
+          Map<String, dynamic>? data = userDocs.data() as Map<String, dynamic>?;
 
           if (data != null) {
             String fullName = data["name"];
@@ -64,7 +63,6 @@ class _QrScreenState extends State<QrScreen> {
     }
   }
 
-
   Future<void> processQrCode(String scannedQRCode) async {
     try {
       final QuerySnapshot slots = await firestore.collection("slots").get();
@@ -81,36 +79,38 @@ class _QrScreenState extends State<QrScreen> {
           String currentStatus = slot.get("status") ?? "unknown";
           DateTime currentTime = DateTime.now();
 
-          String newStatus = (currentStatus == "available") ? "busy" : "available";
+          String newStatus =
+              (currentStatus == "available") ? "busy" : "available";
 
           Map<String, dynamic> updateData = {
             "status": newStatus,
-            (newStatus == "busy") ? "time_in" : "time_out": Timestamp.fromDate(currentTime),
+            (newStatus == "busy") ? "time_in" : "time_out":
+                Timestamp.fromDate(currentTime),
           };
 
           try {
-            await firestore.collection("slots").doc(firestoreQRCode).update(updateData);
+            await firestore
+                .collection("slots")
+                .doc(firestoreQRCode)
+                .update(updateData);
 
             if (newStatus == "busy") {
               await firestore.collection("users").doc(user!.uid).update({
                 "time_in": Timestamp.fromDate(currentTime),
                 "slot": firestoreQRCode
-
               });
             } else {
+              DateTime timeIn = (slot.get("time_in") as Timestamp).toDate();
+              DateTime timeOut = currentTime;
 
-DateTime timeIn = (slot.get("time_in") as Timestamp).toDate();
-      DateTime timeOut = currentTime;
-      
-      // Calculate due_amount based on the difference between time_out and time_in
-      double fare = (timeOut.difference(timeIn).inMinutes * 0.50);
-      
-      // Update users collection with the new field due_amount
-      await firestore.collection("users").doc(user!.uid).update({
-        "time_out": Timestamp.fromDate(currentTime),
-        "due_amount": fare,
-        "slot": null
+              // Calculate due_amount based on the difference between time_out and time_in
+              double fare = (timeOut.difference(timeIn).inMinutes * 0.50);
 
+              // Update users collection with the new field due_amount
+              await firestore.collection("users").doc(user!.uid).update({
+                "time_out": Timestamp.fromDate(currentTime),
+                "due_amount": fare,
+                "slot": null
               });
             }
 
@@ -118,10 +118,14 @@ DateTime timeIn = (slot.get("time_in") as Timestamp).toDate();
               context: context,
               builder: (BuildContext context) {
                 return AlertDialog(
-                  title: Text((newStatus == "busy") ? 'Congratulations!' : 'Notification'),
+                  title: Text((newStatus == "busy")
+                      ? 'Congratulations!'
+                      : 'Notification'),
                   content: (newStatus == "busy")
-                      ? Text('Your slot registration was successful. Thank you for using our service!')
-                      : Text('We\'re sorry to see you leave. Your slot is now available for others.'),
+                      ? Text(
+                          'Your slot registration was successful. Thank you for using our service!')
+                      : Text(
+                          'We\'re sorry to see you leave. Your slot is now available for others.'),
                   actions: <Widget>[
                     TextButton(
                       onPressed: () async {
@@ -133,7 +137,8 @@ DateTime timeIn = (slot.get("time_in") as Timestamp).toDate();
 
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => HomeNavigator()),
+                          MaterialPageRoute(
+                              builder: (context) => HomeNavigator()),
                         );
                       },
                       child: Text('OK'),
@@ -150,7 +155,8 @@ DateTime timeIn = (slot.get("time_in") as Timestamp).toDate();
         }
       }
 
-      print('No match found. Scanned QR Code does not match any Firestore QR Code.');
+      print(
+          'No match found. Scanned QR Code does not match any Firestore QR Code.');
     } catch (e) {
       print('Error comparing with Firestore document IDs: $e');
     }
@@ -192,20 +198,13 @@ DateTime timeIn = (slot.get("time_in") as Timestamp).toDate();
                   onPressed: () {
                     Navigator.of(context).pop(); // Close the dialog
 
-
-
 // Navigate to PaymentScreen
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => PaymentScreen(),
-                ),
-              );
-
-
-
-
-                    
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => PaymentScreen(),
+                      ),
+                    );
                   },
                   child: Text(
                     "Pay Now",
@@ -347,8 +346,7 @@ DateTime timeIn = (slot.get("time_in") as Timestamp).toDate();
             Center(
               child: Container(
                 padding: EdgeInsets.symmetric(
-                    horizontal:
-                        MediaQuery.of(context).size.width * 0.1),
+                    horizontal: MediaQuery.of(context).size.width * 0.1),
                 child: const Text(
                   "Create or Decode?",
                   style: TextStyle(
@@ -363,8 +361,7 @@ DateTime timeIn = (slot.get("time_in") as Timestamp).toDate();
             Center(
               child: Container(
                 padding: EdgeInsets.symmetric(
-                    horizontal:
-                        MediaQuery.of(context).size.width * 0.1),
+                    horizontal: MediaQuery.of(context).size.width * 0.1),
                 child: const Text(
                   "It's All at Your Fingertips!",
                   style: TextStyle(

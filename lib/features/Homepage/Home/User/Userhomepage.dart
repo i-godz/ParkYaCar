@@ -190,7 +190,7 @@ class _HomeScreenState extends State<homeScreen> {
               Stack(
                 children: [
                   Container(
-  margin: EdgeInsets.fromLTRB(16, 620, 16, 0), // Adjust margin as needed
+             margin: EdgeInsets.fromLTRB(16, 620, 16, 0), // Adjust margin as needed
   width: double.infinity,
   child: Text(
     "T W O            W A Y             T R A F F I C",

@@ -4,8 +4,9 @@ import 'package:demoapp/features/Authentication/Login/email_forget_password.dart
 import 'package:demoapp/features/Homepage/Camera/Generate_QrCode.dart';
 import 'package:demoapp/features/Homepage/Camera/Qr_Screen.dart';
 import 'package:demoapp/features/Homepage/Home/Admin/AdminBottomNavigator.dart';
+import 'package:demoapp/features/Homepage/Home/Admin/AdminSummary.dart';
 import 'package:demoapp/features/Homepage/Home/Admin/Adminhomepage.dart';
-import 'package:demoapp/features/Homepage/Profile/User/Parking_History/parking_history.dart';
+import 'package:demoapp/features/Homepage/Profile/User/Parking_History/ParkingHistory.dart';
 import 'package:demoapp/features/Payment_Manager/PaymentPage.dart';
 import 'package:demoapp/features/Homepage/Home/User/HomeNavigator.dart';
 import 'package:demoapp/features/Homepage/Home/User/Userhomepage.dart';
@@ -13,7 +14,7 @@ import 'package:demoapp/features/Authentication/Login/loginScreen.dart';
 import 'package:demoapp/features/Authentication/Login/phone_forget_password.dart';
 import 'package:demoapp/features/Authentication/Register/registerScreen.dart';
 import 'package:demoapp/features/Authentication/Register/verify_registration.dart';
-import 'package:demoapp/features/Homepage/Profile/Admin/Add_Admin_Account.dart';
+import 'package:demoapp/features/Homepage/Profile/Admin/AdminSettings.dart';
 import 'package:demoapp/features/Homepage/Profile/Admin/AdminProfile.dart';
 import 'package:demoapp/features/Homepage/Profile/User/AboutUs/about_us.dart';
 import 'package:demoapp/features/Homepage/Profile/User/Account_Preferences/AccountPreference.dart';
@@ -54,12 +55,17 @@ class Routes {
   static const String HelpandSuport = "/HelpandSuport";
   static const String AdminHomeNavigator = "/AdminHomeNavigator";
   static const String ParkingHistory = "/ParkingHistory";
+  static const String AdminSummary = "/AdminSummary";
 
 }
 class AppRoutes {
   static Route<dynamic> generate(RouteSettings settings) {
     switch (settings.name) {
 
+case Routes.AdminSummary: // Add this case
+        return MaterialPageRoute(
+          builder: (context) =>  AdminSummary(),
+        );
 
 case Routes.AdminHomeNavigator: // Add this case
         return MaterialPageRoute(
