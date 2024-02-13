@@ -26,7 +26,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
   double due_amount = 0.0;
   double bonusValue = 0.0;
 
-  bool showBonusCheckbox = false; 
+  bool showBonusCheckbox = false;
 
   @override
   void initState() {
@@ -34,58 +34,56 @@ class _PaymentScreenState extends State<PaymentScreen> {
     getData();
   }
 
- void getData() async {
-  User? user = _auth.currentUser;
-  if (user != null) {
-    final DocumentSnapshot userDocs =
-        await firestore.collection("users").doc(user.uid).get();
+  void getData() async {
+    User? user = _auth.currentUser;
+    if (user != null) {
+      final DocumentSnapshot userDocs =
+          await firestore.collection("users").doc(user.uid).get();
 
-    if (userDocs.exists) {
-      Map<String, dynamic>? data =
-          userDocs.data() as Map<String, dynamic>?;
+      if (userDocs.exists) {
+        Map<String, dynamic>? data = userDocs.data() as Map<String, dynamic>?;
 
-      if (data != null) {
-        if (data.containsKey("name")) {
-          fullNameController.text = data["name"] ?? "";
+        if (data != null) {
+          if (data.containsKey("name")) {
+            fullNameController.text = data["name"] ?? "";
 
-          if (data["time_out"] != null) {
-            DateTime timeOut = (data["time_out"] as Timestamp).toDate();
-            outController.text = _formatDateTime(timeOut);
-          }
+            if (data["time_out"] != null) {
+              DateTime timeOut = (data["time_out"] as Timestamp).toDate();
+              outController.text = _formatDateTime(timeOut);
+            }
 
-          if (data["time_in"] != null) {
-            DateTime timeIn = (data["time_in"] as Timestamp).toDate();
-            inController.text = _formatDateTime(timeIn);
-          }
+            if (data["time_in"] != null) {
+              DateTime timeIn = (data["time_in"] as Timestamp).toDate();
+              inController.text = _formatDateTime(timeIn);
+            }
 
-          if (data["due_amount"] != null) {
-            // Parse the value to a double
-            double dueAmountValue =
-                double.parse(data["due_amount"].toString());
+            if (data["due_amount"] != null) {
+              // Parse the value to a double
+              double dueAmountValue =
+                  double.parse(data["due_amount"].toString());
 
-            // Assign the parsed value to due_amount
-            due_amount = dueAmountValue;
+              // Assign the parsed value to due_amount
+              due_amount = dueAmountValue;
 
-            // Set the text in the controller
-            amountController.text = dueAmountValue.toString();
-          }
+              // Set the text in the controller
+              amountController.text = dueAmountValue.toString();
+            }
 
-          // Check if the bonus field has a value greater than 0
-          if (data["bonus"] != null && data["bonus"] > 0) {
-            setState(() {
-              showBonusCheckbox = false;
-              bonusValue = data["bonus"];
-            });
+            // Check if the bonus field has a value greater than 0
+            if (data["bonus"] != null && data["bonus"] > 0) {
+              setState(() {
+                showBonusCheckbox = false;
+                bonusValue = data["bonus"];
+              });
+            }
           }
         }
+      } else {
+        // Handle the case where the document does not exist (optional)
       }
-    } else {
-      // Handle the case where the document does not exist (optional)
+      setState(() {});
     }
-    setState(() {});
   }
-}
-
 
   String _formatDateTime(DateTime dateTime) {
     return DateFormat('yyyy-MM-dd \'at\' HH:mm').format(dateTime);
@@ -247,68 +245,60 @@ class _PaymentScreenState extends State<PaymentScreen> {
               ),
             ),
             const SizedBox(height: 15),
-
-
-
-
-
-
-
-   Container(
-              padding: const EdgeInsets.only(
-                  right: 25.0), // Adjust the left padding as needed
-
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                Checkbox(
-  value: showBonusCheckbox, 
-  onChanged: (newValue) {
-    setState(() {
-      showBonusCheckbox = newValue!;
-      if (newValue == true) {
-        // Store the original value of amountController.text
-        double currentAmount = double.parse(amountController.text);
-        amountController.text = (currentAmount - bonusValue).toString();
-      } else {
-        // Restore the original value when checkbox is unchecked
-            amountController.text = due_amount.toString();
-             showBonusCheckbox = false;
-      }
-    });
-  },
-  activeColor: AppColors.lightBlue, // Change the checkbox color as needed
+            Container(
+  padding: const EdgeInsets.only(
+    right: 25.0, // Adjust the left padding as needed
+  ),
+  child: Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      if (bonusValue > 0) // Check if bonusValue is greater than 0
+        Checkbox(
+          value: showBonusCheckbox,
+          onChanged: (newValue) {
+            setState(() {
+              showBonusCheckbox = newValue!;
+              if (newValue == true) {
+                // Store the original value of amountController.text
+                double currentAmount = double.parse(amountController.text);
+                amountController.text =
+                    (currentAmount - bonusValue).toString();
+              } else {
+                // Restore the original value when checkbox is unchecked
+                amountController.text = due_amount.toString();
+                showBonusCheckbox = false;
+              }
+            });
+          },
+          activeColor: AppColors
+              .lightBlue, // Change the checkbox color as needed
+        ),
+      if (bonusValue > 0) // Check if bonusValue is greater than 0
+        Text(
+          'Would you like to apply L.E$bonusValue bonus XP?',
+          style: TextStyle(
+            color: AppColors.headerGrey,
+            fontSize: 12,
+          ),
+        ),
+    ],
+  ),
 ),
-
-                  Text(
-                    'Would you like to apply L.E$bonusValue bonus XP?',
-                    style: TextStyle(
-                      color: AppColors.headerGrey,
-                      fontSize: 15,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-
-
-
-
-
-
-
-
-
-
-
 
             const SizedBox(height: 10),
             Container(
               padding: const EdgeInsets.fromLTRB(45, 0, 40, 0),
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: _pay,
+                onPressed: () {
+                  // Check if the checkbox is checked
+                  if (showBonusCheckbox) {
+                    double currentAmount = double.parse(amountController.text);
+                    due_amount = currentAmount; // Update due_amount
+                  }
+                  // Call the _pay function
+                  _pay();
+                },
                 style: ButtonStyle(
                   backgroundColor:
                       MaterialStateProperty.all(AppColors.lightBlue),

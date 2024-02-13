@@ -18,6 +18,7 @@ class _AccountPreferencesState extends State<AccountPreferences> {
   final TextEditingController fullNameController = TextEditingController();
   final TextEditingController userEmailController = TextEditingController();
   final TextEditingController userNumberController = TextEditingController();
+  final TextEditingController bonusController = TextEditingController();
 
   @override
   void initState() {
@@ -44,6 +45,9 @@ void getData() async {
         if (data.containsKey("phone")) {
           userNumberController.text = data["phone"];
         }
+        if (data.containsKey("bonus")) {
+          bonusController.text = data["bonus"].toString();
+        }
       } else {
         // Handle the case where data is null (optional)
       }
@@ -54,7 +58,6 @@ void getData() async {
     setState(() {});
   }
 }
-
 
   Future<void> updateUserData() async {
     User? user = _auth.currentUser;
@@ -205,6 +208,31 @@ void getData() async {
                 ),
               ),
             ),
+            const SizedBox(height: 20),
+
+Center(
+              child: Container(
+                width: 300,
+                decoration: BoxDecoration(
+                  border: Border.all(color: AppColors.borderlightBlue),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: TextFormField(
+                  enabled: false,
+                  controller: bonusController,
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                     prefixIcon: Icon(
+                      Icons.paid,
+                      color: AppColors.lightBlue,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
+
             const SizedBox(height: 20),
             Container(
               padding: const EdgeInsets.fromLTRB(45, 0, 40, 0),

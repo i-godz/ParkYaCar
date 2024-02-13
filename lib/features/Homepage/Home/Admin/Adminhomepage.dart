@@ -251,9 +251,6 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                             ),
 
 
-
-
-
   trailing: GestureDetector(
       onTap: () {
         deleteAdminAccount(context);

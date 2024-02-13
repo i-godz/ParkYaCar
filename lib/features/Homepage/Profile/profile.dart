@@ -75,8 +75,6 @@ pickImage(ImageSource source) async {
   }
 }
 
-
-
  void selectImage() async {
   Uint8List? img = await pickImage(ImageSource.gallery);
   if (img != null) {
@@ -89,7 +87,6 @@ pickImage(ImageSource source) async {
     print("No image selected");
   }
 }
-
 
   Future<String> storeImage(String childName, Uint8List file) async {
     Reference ref = _storage.ref().child(childName);
@@ -212,6 +209,13 @@ pickImage(ImageSource source) async {
               icon: AppImages.issueIcon,
               press: () {
                 Navigator.of(context).pushNamed(Routes.HelpandSupport);
+              },
+            ),
+              ProfileMenu(
+              text: "Parking History",
+              icon: AppImages.parkingHistory,
+              press: () {
+                Navigator.of(context).pushNamed(Routes.ParkingHistory);
               },
             ),
             ProfileMenu(

@@ -45,8 +45,8 @@ class AppImages {
  static const String gateIcon = "assets/icons/gateIcon.png";
  static const String gatesPage = "assets/images/gates.png";
  static const String bottomGateIcon = "assets/icons/gateIcon_2.png";
-
-
+ static const String parkingHistory = "assets/icons/history.png";
+ static const String noData = "assets/images/Nodata.png";
 
 // Help and Support
   static const String CheerUp = "assets/images/CheerUp.png";
@@ -64,8 +64,4 @@ class AppImages {
 
 // Payment Screens
   static const String creditImage = "assets/images/Credit_Payment.png";
-
-
-
-
 }

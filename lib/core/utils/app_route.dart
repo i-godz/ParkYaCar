@@ -5,6 +5,7 @@ import 'package:demoapp/features/Homepage/Camera/Generate_QrCode.dart';
 import 'package:demoapp/features/Homepage/Camera/Qr_Screen.dart';
 import 'package:demoapp/features/Homepage/Home/Admin/AdminBottomNavigator.dart';
 import 'package:demoapp/features/Homepage/Home/Admin/Adminhomepage.dart';
+import 'package:demoapp/features/Homepage/Profile/User/Parking_History/parking_history.dart';
 import 'package:demoapp/features/Payment_Manager/PaymentPage.dart';
 import 'package:demoapp/features/Homepage/Home/User/HomeNavigator.dart';
 import 'package:demoapp/features/Homepage/Home/User/Userhomepage.dart';
@@ -52,6 +53,7 @@ class Routes {
   static const String PaymobWebView = "/PaymobWebView";
   static const String HelpandSuport = "/HelpandSuport";
   static const String AdminHomeNavigator = "/AdminHomeNavigator";
+  static const String ParkingHistory = "/ParkingHistory";
 
 }
 class AppRoutes {
@@ -64,7 +66,10 @@ case Routes.AdminHomeNavigator: // Add this case
           builder: (context) =>  AdminHomeNavigator(),
         );
 
-
+case Routes.ParkingHistory: // Add this case
+        return MaterialPageRoute(
+          builder: (context) =>  ParkingHistory(),
+        );
 
 case Routes.HelpandSuport: // Add this case
         return MaterialPageRoute(
