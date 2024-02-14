@@ -204,6 +204,13 @@ pickImage(ImageSource source) async {
                 Navigator.of(context).pushNamed(Routes.aboutUs);
               },
             ),
+             ProfileMenu(
+              text: "Treat Yourself",
+              icon: AppImages.reward,
+              press: () {
+                Navigator.of(context).pushNamed(Routes.TreatYourself);
+              },
+            ),
             ProfileMenu(
               text: "Help & Support",
               icon: AppImages.issueIcon,

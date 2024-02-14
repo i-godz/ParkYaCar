@@ -7,6 +7,7 @@ import 'package:demoapp/features/Homepage/Home/Admin/AdminBottomNavigator.dart';
 import 'package:demoapp/features/Homepage/Home/Admin/AdminSummary.dart';
 import 'package:demoapp/features/Homepage/Home/Admin/Adminhomepage.dart';
 import 'package:demoapp/features/Homepage/Profile/User/Parking_History/ParkingHistory.dart';
+import 'package:demoapp/features/Homepage/Profile/User/Treat_Yourself/TreatYourself.dart';
 import 'package:demoapp/features/Payment_Manager/PaymentPage.dart';
 import 'package:demoapp/features/Homepage/Home/User/HomeNavigator.dart';
 import 'package:demoapp/features/Homepage/Home/User/Userhomepage.dart';
@@ -56,11 +57,17 @@ class Routes {
   static const String AdminHomeNavigator = "/AdminHomeNavigator";
   static const String ParkingHistory = "/ParkingHistory";
   static const String AdminSummary = "/AdminSummary";
+  static const String TreatYourself = "/TreatYourself";
 
 }
 class AppRoutes {
   static Route<dynamic> generate(RouteSettings settings) {
     switch (settings.name) {
+
+case Routes.TreatYourself: // Add this case
+        return MaterialPageRoute(
+          builder: (context) =>  TreatYourself(),
+        );
 
 case Routes.AdminSummary: // Add this case
         return MaterialPageRoute(
