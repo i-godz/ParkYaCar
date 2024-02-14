@@ -75,16 +75,16 @@ class _AdminSummaryState extends State<AdminSummary> {
     }
     totalBalance = total;
 
-// Get total count of users with role 'Customer'
+    // Get total count of users with role 'Customer'
     final QuerySnapshot usersSnapshot = await firestore
         .collection('users')
         .where('role', isEqualTo: 'Customer')
         .get();
     totalCustomerUsers = usersSnapshot.docs.length;
 
-// Initialize a counter for users who left an app rating
+    // Initialize a counter for users who left an app rating
 
-// Iterate over each user document
+    // Iterate over each user document
     for (final userDoc in usersSnapshot.docs) {
       // Get the user data as a map
       final userData = userDoc.data() as Map<String, dynamic>;
@@ -111,7 +111,6 @@ class _AdminSummaryState extends State<AdminSummary> {
     } else {
       userImageProvider = const AssetImage(AppImages.userPicture);
     }
-
     return Scaffold(
       body: SafeArea(
         top: false,
@@ -186,7 +185,6 @@ class _AdminSummaryState extends State<AdminSummary> {
                   ),
                 ),
               ),
-              const SizedBox(height: 60),
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Column(
@@ -397,6 +395,92 @@ class _AdminSummaryState extends State<AdminSummary> {
                                 ),
                               ),
                             ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.fromLTRB(0, 0, 100, 0),
+                          child: const Text(
+                            "Recent Transactions",
+                            style: TextStyle(
+                              fontSize: 27,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                              fontFamily: "Nexa",
+                            ),
+                          ),
+                        ),
+                        Center(
+                          // Adjust the top padding as needed
+                          child: FutureBuilder<QuerySnapshot>(
+                            future: firestore.collection('transactions').get(),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return CircularProgressIndicator();
+                              } else if (snapshot.hasError) {
+                                return Text('Error: ${snapshot.error}');
+                              } else {
+                                return ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount: snapshot.data!.docs.length,
+                                  itemBuilder: (context, index) {
+                                    var transaction = snapshot.data!.docs[index]
+                                        .data() as Map<String, dynamic>;
+
+                                    var transactionId =
+                                        transaction["Transaction ID"] ?? "N/A";
+                                    var dueAmountPaid =
+                                        transaction["due_amount_paid"] ?? "N/A";
+                                    var slot = transaction["slot"] ?? "N/A";
+
+                                    return Container(
+                                      margin: const EdgeInsets.symmetric(
+                                        vertical: 7,
+                                        horizontal: 20,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xFFEEEEEE),
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                      ),
+                                      child: ListTile(
+                                        title: Text(
+                                          "Transaction ID: ${transaction["Transaction ID"]}",
+                                          style: const TextStyle(
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        subtitle: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "Paid: ${transaction["due_amount_paid"]}",
+                                              style: const TextStyle(
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                            Text(
+                                              "Slot: ${transaction["slot"]}",
+                                              style: const TextStyle(
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                );
+                              }
+                            },
                           ),
                         ),
                       ],

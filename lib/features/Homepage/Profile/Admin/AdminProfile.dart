@@ -189,7 +189,7 @@ class _AdminProfileScreen extends State<AdminProfileScreen> {
               text: "Account Info",
               icon: AppImages.userIcon,
               press: () {
-                Navigator.of(context).pushNamed(Routes.AccountPreferences);
+                Navigator.of(context).pushNamed(Routes.AccountInfo);
               },
             ),
             ProfileMenu(

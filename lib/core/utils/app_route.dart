@@ -6,6 +6,7 @@ import 'package:demoapp/features/Homepage/Camera/Qr_Screen.dart';
 import 'package:demoapp/features/Homepage/Home/Admin/AdminBottomNavigator.dart';
 import 'package:demoapp/features/Homepage/Home/Admin/AdminSummary.dart';
 import 'package:demoapp/features/Homepage/Home/Admin/Adminhomepage.dart';
+import 'package:demoapp/features/Homepage/Profile/Admin/Account_Info.dart';
 import 'package:demoapp/features/Homepage/Profile/User/Parking_History/ParkingHistory.dart';
 import 'package:demoapp/features/Homepage/Profile/User/Treat_Yourself/TreatYourself.dart';
 import 'package:demoapp/features/Payment_Manager/PaymentPage.dart';
@@ -18,7 +19,7 @@ import 'package:demoapp/features/Authentication/Register/verify_registration.dar
 import 'package:demoapp/features/Homepage/Profile/Admin/AdminSettings.dart';
 import 'package:demoapp/features/Homepage/Profile/Admin/AdminProfile.dart';
 import 'package:demoapp/features/Homepage/Profile/User/AboutUs/about_us.dart';
-import 'package:demoapp/features/Homepage/Profile/User/Account_Preferences/AccountPreference.dart';
+import 'package:demoapp/features/Homepage/Profile/User/Account_Info/AccountPreference.dart';
 import 'package:demoapp/features/Homepage/Profile/User/Help_&_Support/Help_&_Support.dart';
 import 'package:demoapp/features/Homepage/Profile/profile.dart';
 import 'package:demoapp/features/Onboarding/onboardingScreen.dart';
@@ -58,11 +59,17 @@ class Routes {
   static const String ParkingHistory = "/ParkingHistory";
   static const String AdminSummary = "/AdminSummary";
   static const String TreatYourself = "/TreatYourself";
+  static const String AccountInfo = "/AccountInfo";
 
 }
 class AppRoutes {
   static Route<dynamic> generate(RouteSettings settings) {
     switch (settings.name) {
+
+case Routes.AccountInfo: // Add this case
+        return MaterialPageRoute(
+          builder: (context) =>  AccountInfo(),
+        );
 
 case Routes.TreatYourself: // Add this case
         return MaterialPageRoute(
