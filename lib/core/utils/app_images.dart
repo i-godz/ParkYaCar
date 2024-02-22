@@ -2,6 +2,7 @@ class AppImages {
   // Onboarding Screen
   static const String mapImage = "assets/images/map.png";
   static const String logoImage = "assets/images/logo.png";
+  static const String networkError = "assets/images/networkError.png";
 
   static const String onboardingImage1_1 = "assets/images/home-1.1.png";
   static const String onboardingImage2_1 = "assets/images/home-2.1.png";

@@ -154,7 +154,10 @@ class _VerificationState extends State<ResetPasswordScreen> {
                         ),
                         child: const Text(
                           "Reset Password",
-                          style: TextStyle(fontSize: 24),
+                          style: TextStyle(fontSize: 24,
+                              color: Colors.white
+),
+
                         ),
                       ),
                     ],

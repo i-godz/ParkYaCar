@@ -22,6 +22,9 @@ class _HomeScreenState extends State<homeScreen> {
   String imageUrl = '';
   String status = "";
   Map<String, String> slotsStatus = {};
+  String? timeIn;
+  String? timeOut;
+  double? dueAmount;
 
   @override
   void initState() {
@@ -55,6 +58,13 @@ class _HomeScreenState extends State<homeScreen> {
               imageUrl = userImageUrl; // Update the imageUrl
             });
           }
+
+          // Fetch time_in if available
+          String? timeIn = data["time_in"] as String?;
+          // Fetch time_out if available
+          String? timeOut = data["time_out"] as String?;
+          // Fetch due_amount if available
+          String? dueAmount = data["due_amount"] as String?;
         }
       }
     }
@@ -82,6 +92,8 @@ class _HomeScreenState extends State<homeScreen> {
     }
   }
 
+  
+  
   @override
   Widget build(BuildContext context) {
     ImageProvider userImageProvider;
@@ -165,17 +177,42 @@ class _HomeScreenState extends State<homeScreen> {
                       Expanded(
                         child: GestureDetector(
                           onTap: () {
-                            // Navigate to the other page when the container is pressed
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => PaymentScreen()),
-                            );
+                            // Check if all necessary data is available
+                            if (timeIn != null &&
+                                timeOut != null &&
+                                dueAmount != null) {
+                              // Navigate to the PaymentScreen if all data is available
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => PaymentScreen()),
+                              );
+                            } else {
+                              // Show an alert dialog if any of the required data is missing
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: Text(
+                                    'Booking Pending',
+                                    style: TextStyle(
+                                        color: AppColors.darkBlue), // Set the color of the title text to blue
+                                  ),
+                                  content:
+                                      Text('Please complete your reservation.'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => Navigator.pop(context),
+                                      child: Text('OK'),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }
                           },
                           child: Container(
                             alignment: Alignment.centerRight,
                             padding: const EdgeInsets.fromLTRB(0, 50, 30, 0),
-                            child: const Icon(
+                            child: Icon(
                               Icons.account_balance_wallet,
                               color: Colors.white,
                               size: 30,
@@ -190,19 +227,20 @@ class _HomeScreenState extends State<homeScreen> {
               Stack(
                 children: [
                   Container(
-             margin: EdgeInsets.fromLTRB(16, 620, 16, 0), // Adjust margin as needed
-  width: double.infinity,
-  child: Text(
-    "T W O            W A Y             T R A F F I C",
-    style: TextStyle(
-      fontSize: 15,
-      fontWeight: FontWeight.bold,
-      color: AppColors.lightBlue,
-      fontFamily: "Nexa",
-    ),
-    textAlign: TextAlign.center, // Center the text
-  ),
-),
+                    margin: EdgeInsets.fromLTRB(
+                        16, 620, 16, 0), // Adjust margin as needed
+                    width: double.infinity,
+                    child: Text(
+                      "T W O            W A Y             T R A F F I C",
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.lightBlue,
+                        fontFamily: "Nexa",
+                      ),
+                      textAlign: TextAlign.center, // Center the text
+                    ),
+                  ),
 
                   Column(
                     children: [

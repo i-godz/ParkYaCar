@@ -42,7 +42,7 @@ class AuthService {
     User? user = userCredential.user;
 
     if (user != null) {
-     String qrImage = await generateQrImage(user.uid);
+      String qrImage = await generateQrImage(user.uid);
       if (userCredential.additionalUserInfo!.isNewUser) {
         await _firestore.collection("users").doc(user.uid).set({
           "name": user.displayName,
@@ -50,8 +50,12 @@ class AuthService {
           "role": "Customer",
           "qrCodeImage": qrImage,
           "password": "",
-          "phone": ""
-
+          "phone": "",
+          "time_in": "",
+          "time_out": "",
+          "due_amount": "",
+          "ProfileImage": "",
+          "slot": ""
         });
       }
       result = true; // Set result to true if the sign-in is successful

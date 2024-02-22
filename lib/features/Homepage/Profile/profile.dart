@@ -59,34 +59,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-pickImage(ImageSource source) async {
-  final ImagePicker picker = ImagePicker();
-  try {
-    final XFile? _file = await picker.pickImage(source: source);
-    if (_file != null) {
-      // Process the selected image here
-      return await _file.readAsBytes();
+  pickImage(ImageSource source) async {
+    final ImagePicker picker = ImagePicker();
+    try {
+      final XFile? _file = await picker.pickImage(source: source);
+      if (_file != null) {
+        // Process the selected image here
+        return await _file.readAsBytes();
+      } else {
+        print("No image selected");
+      }
+    } catch (e) {
+      print("Error picking or processing the image: $e");
+      // Handle the error as needed
+    }
+  }
+
+  void selectImage() async {
+    Uint8List? img = await pickImage(ImageSource.gallery);
+    if (img != null) {
+      setState(() {
+        _image = img;
+      });
+      updateUserData(double.parse(ratingController.text), img);
     } else {
+      // Handle the case when no image is selected
       print("No image selected");
     }
-  } catch (e) {
-    print("Error picking or processing the image: $e");
-    // Handle the error as needed
   }
-}
-
- void selectImage() async {
-  Uint8List? img = await pickImage(ImageSource.gallery);
-  if (img != null) {
-    setState(() {
-      _image = img;
-    });
-    updateUserData(double.parse(ratingController.text), img);
-  } else {
-    // Handle the case when no image is selected
-    print("No image selected");
-  }
-}
 
   Future<String> storeImage(String childName, Uint8List file) async {
     Reference ref = _storage.ref().child(childName);
@@ -105,7 +105,8 @@ pickImage(ImageSource source) async {
           .doc(user.uid)
           .get();
       if (snapshot.exists) {
-        Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
+        Map<String, dynamic> data =
+            snapshot.data() as Map<String, dynamic>;
         setState(() {
           imageUrl = data["ProfileImage"];
         });
@@ -121,6 +122,14 @@ pickImage(ImageSource source) async {
 
   @override
   Widget build(BuildContext context) {
+    ImageProvider userImageProvider;
+
+    if (imageUrl != null && imageUrl!.isNotEmpty) {
+      userImageProvider = NetworkImage(imageUrl!);
+    } else {
+      userImageProvider = AssetImage(AppImages.userPicture);
+    }
+
     return Scaffold(
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(vertical: 100),
@@ -141,23 +150,19 @@ pickImage(ImageSource source) async {
                 clipBehavior: Clip.none,
                 children: [
                   Positioned(
-                      top: -90,
-                      left: -90,
-                      child: Image.asset(AppImages.profileCircle,
-                          width: 290, height: 290)),
-                  _image != null
-                      ? CircleAvatar(
-                          backgroundImage: MemoryImage(_image!),
-                        )
-                      : (imageUrl != null
-                          ? CircleAvatar(
-                              backgroundImage: NetworkImage(
-                                  imageUrl!), // Use the fetched URL
-                            )
-                          : const CircleAvatar(
-                              backgroundImage: AssetImage(
-                                  AppImages.userPicture), // Default image
-                            )),
+                    top: -90,
+                    left: -90,
+                    child: Image.asset(
+                      AppImages.profileCircle,
+                      width: 290,
+                      height: 290,
+                    ),
+                  ),
+                  Positioned(
+                    child: CircleAvatar(
+                      backgroundImage: userImageProvider,
+                    ),
+                  ),
                   Positioned(
                     right: -16,
                     bottom: 0,
@@ -170,7 +175,9 @@ pickImage(ImageSource source) async {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(50),
                             side: const BorderSide(
-                                color: AppColors.lightBlue, width: 2),
+                              color: AppColors.lightBlue,
+                              width: 2,
+                            ),
                           ),
                           backgroundColor: const Color(0xFFF5F6F9),
                         ),
@@ -204,7 +211,7 @@ pickImage(ImageSource source) async {
                 Navigator.of(context).pushNamed(Routes.aboutUs);
               },
             ),
-             ProfileMenu(
+            ProfileMenu(
               text: "Treat Yourself",
               icon: AppImages.reward,
               press: () {
@@ -218,7 +225,7 @@ pickImage(ImageSource source) async {
                 Navigator.of(context).pushNamed(Routes.HelpandSupport);
               },
             ),
-              ProfileMenu(
+            ProfileMenu(
               text: "Parking History",
               icon: AppImages.parkingHistory,
               press: () {
@@ -258,7 +265,8 @@ pickImage(ImageSource source) async {
                               color: Colors.amber,
                             ),
                             onRatingUpdate: (rating) {
-                              userRating = rating; // Update the user's rating.
+                              userRating =
+                                  rating; // Update the user's rating.
                             },
                           ),
                         ],

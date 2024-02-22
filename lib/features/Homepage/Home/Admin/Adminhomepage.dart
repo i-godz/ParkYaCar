@@ -167,7 +167,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                               children: [
                                 Container(
                                   padding:
-                                      const EdgeInsets.fromLTRB(20, 55, 0, 0),
+                                      const EdgeInsets.fromLTRB(0, 55, 45, 0),
                                   child: Text(
                                     "Hello, $userName!",
                                     style: const TextStyle(
@@ -182,7 +182,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                                   padding:
                                       const EdgeInsets.fromLTRB(20, 0, 0, 0),
                                   child: const Text(
-                                    "Welcome to you're admin panel",
+                                    "Welcome to you're admin dashboard",
                                     style: TextStyle(
                                       fontSize: 13,
                                       fontWeight: FontWeight.bold,

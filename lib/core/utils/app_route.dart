@@ -9,6 +9,7 @@ import 'package:demoapp/features/Homepage/Home/Admin/Adminhomepage.dart';
 import 'package:demoapp/features/Homepage/Profile/Admin/Account_Info.dart';
 import 'package:demoapp/features/Homepage/Profile/User/Parking_History/ParkingHistory.dart';
 import 'package:demoapp/features/Homepage/Profile/User/Treat_Yourself/TreatYourself.dart';
+import 'package:demoapp/features/Onboarding/NetworkError.dart';
 import 'package:demoapp/features/Payment_Manager/PaymentPage.dart';
 import 'package:demoapp/features/Homepage/Home/User/HomeNavigator.dart';
 import 'package:demoapp/features/Homepage/Home/User/Userhomepage.dart';
@@ -60,11 +61,17 @@ class Routes {
   static const String AdminSummary = "/AdminSummary";
   static const String TreatYourself = "/TreatYourself";
   static const String AccountInfo = "/AccountInfo";
+  static const String NetworkFailure = "/NetworkFailure";
 
 }
 class AppRoutes {
   static Route<dynamic> generate(RouteSettings settings) {
     switch (settings.name) {
+
+case Routes.NetworkFailure: // Add this case
+        return MaterialPageRoute(
+          builder: (context) =>  NetworkFailure(),
+        );
 
 case Routes.AccountInfo: // Add this case
         return MaterialPageRoute(

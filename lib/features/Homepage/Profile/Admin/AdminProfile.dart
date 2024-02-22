@@ -92,6 +92,12 @@ class _AdminProfileScreen extends State<AdminProfileScreen> {
     return downloadUrl;
   }
 
+  String generateTransactionId(String userSlot) {
+    // Generate a unique transaction ID based on current timestamp and user slot
+    String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
+    return userSlot + '' + timestamp;
+  }
+
   Future<void> fetchImageUrl() async {
     User? user = _auth.currentUser;
     if (user != null) {
@@ -237,11 +243,80 @@ class _AdminProfileScreen extends State<AdminProfileScreen> {
     setState(() {
       this.controller = controller;
     });
-    controller.scannedDataStream.listen((scanData) {
+    controller.scannedDataStream.listen((scanData) async {
       // Process the scanned QR code data
       print('Scanned QR Code: ${scanData.code}');
-      // Add your code to process the scanned QR code data here
+      String? scannedEmail = scanData
+          .code; // Assuming the email is the data scanned from the QR code
+      await fetchUserData(scannedEmail!, context);
     });
+  }
+
+  Future<void> fetchUserData(String scannedEmail, BuildContext context) async {
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .where('email', isEqualTo: scannedEmail)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        DocumentSnapshot userDoc = querySnapshot.docs.first;
+        Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
+        // Extract customer name and due amount
+        String customerName = userData['name'];
+        double dueAmount = userData['due_amount'] ?? 0.0;
+        String userId = userDoc.id;
+        String userSlot = userDoc.get("slot") ?? "";
+        String transactionId = generateTransactionId(userSlot);
+
+        // Close the camera
+        controller.dispose();
+
+        // Show dialog
+        showDialog(
+          context: context,
+          builder: (BuildContext dialogContext) {
+            return AlertDialog(
+              title: Text('Customer Details'),
+              content: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text('Customer Name: $customerName'),
+                  Text('Due Amount: $dueAmount'),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () async {
+                    await FirebaseFirestore.instance
+                        .collection('transactions')
+                        .add({
+                      'Customer': customerName,
+                      'UserID': userId,
+                      'due_amount_paid': dueAmount,
+                      'slot': userSlot,
+                      'Transaction ID': transactionId
+                    });
+
+                    Navigator.of(dialogContext).pop(); // Close the dialog
+                    Navigator.of(context)
+                        .pop(); // Navigate back to the previous screen
+                  },
+                  child: Text('Cash Received'),
+                ),
+              ],
+            );
+          },
+        );
+      } else {
+        // Email not found
+        print('Email not found in users collection');
+      }
+    } catch (e) {
+      // Error occurred
+      print('Error fetching user data: $e');
+    }
   }
 
   Future<void> scanQr() async {

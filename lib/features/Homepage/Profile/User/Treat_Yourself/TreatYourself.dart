@@ -1,6 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:demoapp/core/utils/app_colors.dart';
 import 'package:demoapp/core/utils/app_images.dart';
-import 'package:flutter/material.dart';
 
 class TreatYourself extends StatefulWidget {
   @override
@@ -10,6 +10,9 @@ class TreatYourself extends StatefulWidget {
 class _TreatYourselfState extends State<TreatYourself> {
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double containerWidth = (screenWidth - 60) / 2; // Subtracting padding and spacing between containers
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFAFAFA),
@@ -30,166 +33,55 @@ class _TreatYourselfState extends State<TreatYourself> {
         ),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(vertical: 10),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                    child: const Text(
-                      "Redeem your points at one of our partner stores!",
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                        fontFamily: "Nexa",
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        width: 175,
-                        height: 150,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFEEEEEE),
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        child: Image.asset(
-                          AppImages.we,
-                          width: 100,
-                          height: 100,
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                      Container(
-                        width: 175,
-                        height: 150,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFEEEEEE),
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        child: Image.asset(
-                          AppImages.mawaslatmasr,
-                          width: 100,
-                          height: 100,
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 15),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        width: 175,
-                        height: 150,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFEEEEEE),
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        child: Image.asset(
-                          AppImages.goBus,
-                          width: 100,
-                          height: 100,
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                      Container(
-                        width: 175,
-                        height: 150,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFEEEEEE),
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        child: Image.asset(
-                          AppImages.buffaloBurger,
-                          width: 50,
-                          height: 50,
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 15),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        width: 175,
-                        height: 150,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFEEEEEE),
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        child: Image.asset(
-                          AppImages.twoB,
-                          width: 100,
-                          height: 100,
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                      Container(
-                        width: 175,
-                        height: 150,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFEEEEEE),
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        child: Image.asset(
-                          AppImages.fatis,
-                          width: 50,
-                          height: 50,
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 15),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        width: 175,
-                        height: 150,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFEEEEEE),
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        child: Image.asset(
-                          AppImages.gym,
-                          width: 100,
-                          height: 100,
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                      Container(
-                        width: 175,
-                        height: 150,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFEEEEEE),
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        child: Image.asset(
-                          AppImages.uber,
-                          width: 50,
-                          height: 50,
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+            Container(
+              padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+              child: const Text(
+                "Redeem your points at one of our partner stores!",
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                  fontFamily: "Nexa",
+                ),
               ),
+            ),
+            const SizedBox(height: 10),
+            Wrap(
+              spacing: 20,
+              runSpacing: 15,
+              children: [
+                _buildContainer(AppImages.we, containerWidth),
+                _buildContainer(AppImages.mawaslatmasr, containerWidth),
+                _buildContainer(AppImages.goBus, containerWidth),
+                _buildContainer(AppImages.buffaloBurger, containerWidth),
+                _buildContainer(AppImages.twoB, containerWidth),
+                _buildContainer(AppImages.fatis, containerWidth),
+                _buildContainer(AppImages.gym, containerWidth),
+                _buildContainer(AppImages.uber, containerWidth),
+              ],
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildContainer(String imagePath, double width) {
+    return Container(
+      width: width,
+      height: width * 0.75, // Adjust the height as needed
+      decoration: BoxDecoration(
+        color: const Color(0xFFEEEEEE),
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      child: Image.asset(
+        imagePath,
+        width: width * 0.5, // Adjust the image size as needed
+        height: width * 0.5,
+        fit: BoxFit.contain,
       ),
     );
   }

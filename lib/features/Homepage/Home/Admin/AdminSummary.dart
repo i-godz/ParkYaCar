@@ -73,7 +73,7 @@ class _AdminSummaryState extends State<AdminSummary> {
             data['due_amount_paid'] as double; // Ensure the type is correct
       }
     }
-    totalBalance = total;
+totalBalance = double.parse(total.toStringAsFixed(2));
 
     // Get total count of users with role 'Customer'
     final QuerySnapshot usersSnapshot = await firestore
@@ -170,7 +170,7 @@ class _AdminSummaryState extends State<AdminSummary> {
                           Container(
                             padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
                             child: const Text(
-                              "Welcome to your admin dashboard",
+                              "Welcome to you're admin dashboard",
                               style: TextStyle(
                                 fontSize: 13,
                                 fontWeight: FontWeight.bold,
@@ -188,302 +188,135 @@ class _AdminSummaryState extends State<AdminSummary> {
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 100, 0),
-                      child: const Text(
-                        "Executive Summary",
-                        style: TextStyle(
-                          fontSize: 27,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                          fontFamily: "Nexa",
-                        ),
+                    const Text(
+                      "Executive Summary",
+                      style: TextStyle(
+                        fontSize: 27,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                        fontFamily: "Nexa",
                       ),
                     ),
-                    const SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          width: 120,
-                          height: 120,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFEEEEEE),
-                            borderRadius: BorderRadius.circular(10.0),
+                    const SizedBox(height: 5),
+                    Center(
+                      child: Wrap(
+                        spacing: 20, // Horizontal spacing between items
+                        runSpacing: 20, // Vertical spacing between rows
+                        children: [
+                          SummaryItem(
+                            title: 'Balance',
+                            value: totalBalance.toString(),
                           ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                "Balance",
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                  fontFamily: "Nexa",
-                                ),
-                              ),
-                              Text(
-                                "$totalBalance", // Replace with actual total order count
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                  fontFamily: "Nexa",
-                                ),
-                              ),
-                            ],
+                          SummaryItem(
+                            title: 'Total Orders',
+                            value: totalTransactions.toString(),
                           ),
-                        ),
-                        Container(
-                          width: 120,
-                          height: 120,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFEEEEEE),
-                            borderRadius: BorderRadius.circular(10.0),
+                          SummaryItem(
+                            title: 'Total Reviews',
+                            value: usersWithRatingCount.toString(),
                           ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                "Total Orders",
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                  fontFamily: "Nexa",
-                                ),
-                              ),
-                              Text(
-                                "$totalTransactions", // Replace with actual total review count
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                  fontFamily: "Nexa",
-                                ),
-                              ),
-                            ],
+                          SummaryItem(
+                            title: 'Total Users',
+                            value: totalCustomerUsers.toString(),
                           ),
-                        ),
-                        Container(
-                          width: 120,
-                          height: 120,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFEEEEEE),
-                            borderRadius: BorderRadius.circular(10.0),
+                          SummaryItem(
+                            title: 'Active Slots',
+                            value: '9',
                           ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                "Total Reviews",
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                  fontFamily: "Nexa",
-                                ),
-                              ),
-                              Text(
-                                "$usersWithRatingCount", // Replace with actual pending order count
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                  fontFamily: "Nexa",
-                                ),
-                              ),
-                            ],
+                          SummaryItem(
+                            title: 'Inactive Slots',
+                            value: '1',
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 15),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          width: 120,
-                          height: 120,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFEEEEEE),
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                "Total Users",
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                  fontFamily: "Nexa",
-                                ),
-                              ),
-                              Text(
-                                "$totalCustomerUsers", // Replace with actual total order count
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                  fontFamily: "Nexa",
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          width: 120,
-                          height: 120,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFEEEEEE),
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                "Active Slots",
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                  fontFamily: "Nexa",
-                                ),
-                              ),
-                              Text(
-                                "9", // Replace with actual total review count
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                  fontFamily: "Nexa",
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          width: 120,
-                          height: 120,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFEEEEEE),
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                "Inactive Slots",
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                  fontFamily: "Nexa",
-                                ),
-                              ),
-                              Text(
-                                "1", // Replace with actual pending order count
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                  fontFamily: "Nexa",
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                     const SizedBox(height: 20),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.fromLTRB(0, 0, 100, 0),
-                          child: const Text(
-                            "Recent Transactions",
-                            style: TextStyle(
-                              fontSize: 27,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                              fontFamily: "Nexa",
-                            ),
-                          ),
-                        ),
-                        Center(
-                          // Adjust the top padding as needed
-                          child: FutureBuilder<QuerySnapshot>(
-                            future: firestore.collection('transactions').get(),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return CircularProgressIndicator();
-                              } else if (snapshot.hasError) {
-                                return Text('Error: ${snapshot.error}');
-                              } else {
-                                return ListView.builder(
-                                  shrinkWrap: true,
-                                  itemCount: snapshot.data!.docs.length,
-                                  itemBuilder: (context, index) {
-                                    var transaction = snapshot.data!.docs[index]
-                                        .data() as Map<String, dynamic>;
+                    const Text(
+                      "Recent Transactions",
+                      style: TextStyle(
+                        fontSize: 27,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                        fontFamily: "Nexa",
+                      ),
+                    ),
+                    Center(
+                      // Adjust the top padding as needed
+                      child: SingleChildScrollView(
+                        child: FutureBuilder<QuerySnapshot>(
+                          future: firestore.collection('transactions').get(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return CircularProgressIndicator();
+                            } else if (snapshot.hasError) {
+                              return Text('Error: ${snapshot.error}');
+                            } else {
+                              return ListView.builder(
+                                padding: EdgeInsets.all(0),
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemCount: snapshot.data!.docs.length,
+                                itemBuilder: (context, index) {
+                                  var transaction = snapshot.data!.docs[index]
+                                      .data() as Map<String, dynamic>;
 
-                                    var transactionId =
-                                        transaction["Transaction ID"] ?? "N/A";
-                                    var dueAmountPaid =
-                                        transaction["due_amount_paid"] ?? "N/A";
-                                    var slot = transaction["slot"] ?? "N/A";
+                                  var transactionId =
+                                      transaction["Transaction ID"] ?? "N/A";
+                                  var dueAmountPaid =
+                                      transaction["due_amount_paid"] ?? "N/A";
+                                  var slot = transaction["slot"] ?? "N/A";
 
-                                    return Container(
-                                      margin: const EdgeInsets.symmetric(
-                                        vertical: 7,
-                                        horizontal: 20,
+                                  return Container(
+                                    margin: const EdgeInsets.symmetric(
+                                      vertical: 7,
+                                      horizontal: 20,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFFEEEEEE),
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    child: ListTile(
+                                      title: Text(
+                                        "Transaction ID: $transactionId",
+                                        style: const TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: "Nexa",
+                                        ),
                                       ),
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xFFEEEEEE),
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                      ),
-                                      child: ListTile(
-                                        title: Text(
-                                          "Transaction ID: ${transaction["Transaction ID"]}",
-                                          style: const TextStyle(
-                                            color: Colors.black,
+                                      subtitle: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "Paid: $dueAmountPaid",
+                                            style: const TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: "Nexa",
+                                            ),
                                           ),
-                                        ),
-                                        subtitle: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              "Paid: ${transaction["due_amount_paid"]}",
-                                              style: const TextStyle(
-                                                color: Colors.black,
-                                              ),
+                                          Text(
+                                            "Slot: $slot",
+                                            style: const TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: "Nexa",
                                             ),
-                                            Text(
-                                              "Slot: ${transaction["slot"]}",
-                                              style: const TextStyle(
-                                                color: Colors.black,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
+                                          ),
+                                        ],
                                       ),
-                                    );
-                                  },
-                                );
-                              }
-                            },
-                          ),
+                                    ),
+                                  );
+                                },
+                              );
+                            }
+                          },
                         ),
-                      ],
+                      ),
                     ),
                   ],
                 ),
@@ -491,6 +324,48 @@ class _AdminSummaryState extends State<AdminSummary> {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class SummaryItem extends StatelessWidget {
+  final String title;
+  final String value;
+
+  const SummaryItem({required this.title, required this.value});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.3,
+      height: MediaQuery.of(context).size.width * 0.3,
+      decoration: BoxDecoration(
+        color: const Color(0xFFEEEEEE),
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+              fontFamily: "Nexa",
+            ),
+          ),
+          Text(
+            value,
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+              fontFamily: "Nexa",
+            ),
+          ),
+        ],
       ),
     );
   }

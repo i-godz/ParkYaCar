@@ -23,8 +23,7 @@ class _HelpandSuportState extends State<HelpandSuport> {
     if (user != null) {
       firestore.collection("users").doc(user.uid).get().then((userDocs) {
         if (userDocs.exists) {
-          Map<String, dynamic>? data =
-              userDocs.data() as Map<String, dynamic>?;
+          Map<String, dynamic>? data = userDocs.data() as Map<String, dynamic>?;
 
           if (data != null && data.containsKey("slot")) {
             String? userSlot = data["slot"];
@@ -90,7 +89,7 @@ class _HelpandSuportState extends State<HelpandSuport> {
       });
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -170,13 +169,23 @@ class _HelpandSuportState extends State<HelpandSuport> {
               text: "Report an Issue",
               icon: AppImages.customerService,
               press: () async {
-                const String phoneNumber = '+0201157534947';
-                final Uri smsUri = Uri(scheme: 'sms', path: phoneNumber);
-
-                if (await canLaunch(smsUri.toString())) {
-                  launch(smsUri.toString());
-                } else {
-                  throw Exception('Could not launch SMS client');
+                String? encodeQueryParameters(Map<String, String> params) {
+                  return params.entries
+                      .map((MapEntry<String, String> e) =>
+                          '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
+                      .join('&');
+                }
+                final Uri emailLaunchUri = Uri(
+                  scheme: 'mailto',
+                  path: 'nahed@admin.com',
+                  query: encodeQueryParameters(<String, String>{
+                    'subject': 'ParkYaCar Support',
+                  }),
+                );
+                try {
+                  await launchUrl(emailLaunchUri);
+                } catch (e) {
+                  print(e.toString());
                 }
               },
             ),

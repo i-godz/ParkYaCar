@@ -6,6 +6,7 @@ import 'dart:ui';
 import 'package:demoapp/core/utils/app_colors.dart';
 import 'package:demoapp/core/utils/app_images.dart';
 import 'package:demoapp/core/utils/app_route.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -37,14 +38,85 @@ class _RegisterState extends State<registerScreen> {
 
 // Function to handle the signup process
   Signup() async {
-    UserCredential? userCredential; // Declare the variable here
+  UserCredential? userCredential; // Declare the variable here
 
-    try {
-      final passwordPattern = RegExp(
-        r'^(?=.*[a-z])(?=.*[A-Z])(?=.*[\d!@#\$%^&*()_+{}\[\]:;<>,.?~\\-]).{8,}$',
+  try {
+    final passwordPattern = RegExp(
+      r'^(?=.*[a-z])(?=.*[A-Z])(?=.*[\d!@#\$%^&*()_+{}\[\]:;<>,.?~\\-]).{8,}$',
+    );
+    if (!passwordPattern.hasMatch(password)) {
+      // Check if the password doesn't meet the criteria.
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(
+              "Registration Failed",
+              style: TextStyle(color: Colors.red),
+            ),
+            content: Text(
+              "The password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one special character.",
+              style: TextStyle(fontSize: 16),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  "OK",
+                  style: TextStyle(color: Colors.blue),
+                ),
+              ),
+            ],
+          );
+        },
       );
-      if (!passwordPattern.hasMatch(password)) {
-        // Check if the password doesn't meet the criteria.
+      return null; // Return null when registration fails
+    } else if (!EmailValidator.validate(email)) {
+      // Check if the email is not valid
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(
+              "Registration Failed",
+              style: TextStyle(color: Colors.red),
+            ),
+            content: Text(
+              "Please enter a valid email address.",
+              style: TextStyle(fontSize: 16),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  "OK",
+                  style: TextStyle(color: Colors.blue),
+                ),
+              ),
+            ],
+          );
+        },
+      );
+      return null; // Return null when registration fails
+    } else {
+      userCredential = await auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      uId = userCredential!.user!.uid;
+
+      // Send email verification link
+      await userCredential.user!.sendEmailVerification();
+      Navigator.pushNamed(context, Routes.verifyRegistrationScreen);
+    }
+  } catch (e) {
+    if (e is FirebaseAuthException) {
+      if (e.code == 'email-already-in-use') {
+        // Handle the case where the email is already registered.
         showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -54,7 +126,7 @@ class _RegisterState extends State<registerScreen> {
                 style: TextStyle(color: Colors.red),
               ),
               content: Text(
-                "The password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one special character.",
+                "The email is already registered.",
                 style: TextStyle(fontSize: 16),
               ),
               actions: [
@@ -72,77 +144,7 @@ class _RegisterState extends State<registerScreen> {
           },
         );
       } else {
-        userCredential = await auth.createUserWithEmailAndPassword(
-          email: email,
-          password: password,
-        );
-        uId = userCredential!.user!.uid;
-
-        // Send email verification link
-        await userCredential.user!.sendEmailVerification();
-        Navigator.pushNamed(context, Routes.verifyRegistrationScreen);
-      }
-    } catch (e) {
-      if (e is FirebaseAuthException) {
-        if (e.code == 'email-already-in-use') {
-          // Handle the case where the email is already registered.
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: Text(
-                  "Registration Failed",
-                  style: TextStyle(color: Colors.red),
-                ),
-                content: Text(
-                  "The email is already registered.",
-                  style: TextStyle(fontSize: 16),
-                ),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Text(
-                      "OK",
-                      style: TextStyle(color: Colors.blue),
-                    ),
-                  ),
-                ],
-              );
-            },
-          );
-        } else {
-          // Handle other FirebaseAuthException error codes here.
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: Text(
-                  "Registration Failed",
-                  style: TextStyle(color: Colors.red),
-                ),
-                content: Text(
-                  "An error occurred while registering.",
-                  style: TextStyle(fontSize: 16),
-                ),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Text(
-                      "OK",
-                      style: TextStyle(color: Colors.blue),
-                    ),
-                  ),
-                ],
-              );
-            },
-          );
-        }
-      } else {
-        // Handle other exceptions (not FirebaseAuthException) here.
+        // Handle other FirebaseAuthException error codes here.
         showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -170,9 +172,38 @@ class _RegisterState extends State<registerScreen> {
           },
         );
       }
+    } else {
+      // Handle other exceptions (not FirebaseAuthException) here.
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(
+              "Registration Failed",
+              style: TextStyle(color: Colors.red),
+            ),
+            content: Text(
+              "An error occurred while registering.",
+              style: TextStyle(fontSize: 16),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  "OK",
+                  style: TextStyle(color: Colors.blue),
+                ),
+              ),
+            ],
+          );
+        },
+      );
     }
-    return userCredential; // Return the UserCredential or null
   }
+  return userCredential; // Return the UserCredential or null
+}
 
 
 Future<String> generateQrImage(String text) async {
@@ -378,7 +409,8 @@ String qrImage = await generateQrImage(email);
                     "time_out": "",
                     "due_amount": "",
                     "role": "Customer",
-                    "ProfileImage": ""
+                    "ProfileImage": "",
+                    "slot": ""
                   });
                 } else {
                   print("Sign Up Faild");

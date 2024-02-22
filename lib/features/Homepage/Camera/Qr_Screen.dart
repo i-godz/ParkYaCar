@@ -23,7 +23,9 @@ class _QrScreenState extends State<QrScreen> {
   late User? user; // Declare user variable
   String userName = "";
   String imageUrl = '';
-
+  String? timeIn;
+  String? timeOut;
+  double? dueAmount;
   QRViewController? controller;
 
   @override
@@ -46,6 +48,13 @@ class _QrScreenState extends State<QrScreen> {
             String fullName = data["name"];
             List<String> nameParts = fullName.split(" ");
             userName = nameParts.isNotEmpty ? nameParts[0] : fullName;
+
+            // Fetch time_in if available
+            String? timeIn = data["time_in"] as String?;
+            // Fetch time_out if available
+            String? timeOut = data["time_out"] as String?;
+            // Fetch due_amount if available
+            String? dueAmount = data["due_amount"] as String?;
 
             // Fetch the user's image URL
             String? userImageUrl = data["ProfileImage"] as String?;
@@ -177,10 +186,14 @@ class _QrScreenState extends State<QrScreen> {
       DocumentSnapshot userDoc =
           await firestore.collection("users").doc(user!.uid).get();
 
-      double dueAmount = (userDoc.get("due_amount") ?? 0).toDouble();
+      var dueAmountData = userDoc.get("due_amount");
+      double dueAmount = 0;
+
+      if (dueAmountData != null && dueAmountData != "") {
+        dueAmount = double.parse(dueAmountData.toString());
+      }
 
       if (dueAmount > 0) {
-        // If due amount is more than 0, show a dialog instructing the user to pay first.
         showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -197,8 +210,6 @@ class _QrScreenState extends State<QrScreen> {
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).pop(); // Close the dialog
-
-// Navigate to PaymentScreen
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -216,7 +227,6 @@ class _QrScreenState extends State<QrScreen> {
           },
         );
       } else {
-        // If due amount is 0 or less, proceed with scanning.
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -321,16 +331,43 @@ class _QrScreenState extends State<QrScreen> {
                     Expanded(
                       child: GestureDetector(
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => PaymentScreen()),
-                          );
+                          // Check if all necessary data is available
+                          if (timeIn != null &&
+                              timeOut != null &&
+                              dueAmount != null) {
+                            // Navigate to the PaymentScreen if all data is available
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => PaymentScreen()),
+                            );
+                          } else {
+                            // Show an alert dialog if any of the required data is missing
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: Text(
+                                  'Booking Pending',
+                                  style: TextStyle(
+                                      color: AppColors
+                                          .darkBlue), // Set the color of the title text to blue
+                                ),
+                                content:
+                                    Text('Please complete your reservation.'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    child: Text('OK'),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
                         },
                         child: Container(
                           alignment: Alignment.centerRight,
                           padding: const EdgeInsets.fromLTRB(0, 50, 30, 0),
-                          child: const Icon(
+                          child: Icon(
                             Icons.account_balance_wallet,
                             color: Colors.white,
                             size: 30,
