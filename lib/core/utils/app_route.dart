@@ -68,10 +68,10 @@ class AppRoutes {
   static Route<dynamic> generate(RouteSettings settings) {
     switch (settings.name) {
 
-case Routes.NetworkFailure: // Add this case
-        return MaterialPageRoute(
-          builder: (context) =>  NetworkFailure(),
-        );
+// case Routes.NetworkFailure: // Add this case
+//         return MaterialPageRoute(
+//           builder: (context) =>  NetworkFailure(),
+//         );
 
 case Routes.AccountInfo: // Add this case
         return MaterialPageRoute(

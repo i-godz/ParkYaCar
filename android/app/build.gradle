@@ -8,7 +8,7 @@ if (localPropertiesFile.exists()) {
 
 def flutterRoot = localProperties.getProperty('flutter.sdk')
 if (flutterRoot == null) {
-   // throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
+    // throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
 }
 
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
@@ -33,6 +33,7 @@ if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
 android {
+    compileSdkVersion 28
     ndkVersion "25.2.9519653"
     namespace "com.graduationproject.graduation.graduation"
     compileSdkVersion flutter.compileSdkVersion
@@ -56,8 +57,8 @@ android {
         applicationId "com.graduationproject.graduation.graduation"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion 22
-        targetSdkVersion flutter.targetSdkVersion
+        minSdkVersion 21
+        targetSdkVersion 28
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         multiDexEnabled true
@@ -76,4 +77,6 @@ flutter {
     source '../..'
 }
 
-dependencies {}
+dependencies {
+        implementation 'com.android.support:multidex:1.0.3'
+}
